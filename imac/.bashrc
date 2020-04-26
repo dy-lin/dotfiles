@@ -3,7 +3,60 @@
 if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
+
+#------------------------
+# NOTES
+#------------------------
+
+# echo "subject" | mail -s "Numbers Job" dlin@bcgsc.ca
+
+# XMATCHVIEW FONTS
+# /projects/btl/lcoombe/git/xmatchview/tarballs/fonts
+
+# TOP COMMAND TOGGLES
+# l,m,t: to show/hide information at the top
+	# l hides load average info
+	# m hides memory information
+	# t hids task and cpu information
+	# these toggles also help toggle from bar graph
+# P,N,T,R: sorting
+	# P: sort by CPU usage
+	# N: sort by process ID
+	# T: sort by running time
+	# R: reverse the sorting order
+# x: highlight the sorted column with bold text
+# b: highlight the sorted column with background colour
+# d: change the update delay (i.e. top updates every 3.0 seconds)
+# o,O: filter or search processes
+	# e.g. COMMAND=apache (shows only commands containing the word apache)
+# c: display full command path and arguments of process
+# u,U: view processes of a user
+# i: toggle display sleeping/idle processes
+# V: forest mode - displays the processes in a parent child hierarchy
+# n: change the number of processes to display
+# 1: display all CPU cores
+# f: show/hide columns
+
+# https://www.binarytides.com/linux-top-command/
+# https://www.redhat.com/sysadmin/customize-top-command
+
+#------------------------
+# GLOBAL VARIABLES
+#------------------------
+
+# export TISSUES="bark embryo flush_bud mature_needle megagametophyte seed_germination xylem young_buds"
+# export STONECELL="Cort_Par Dev_SC"
+# export WPW="control gallery wound"
+# export PG29_GENES="ABT39_00024884 ABT39_00024885 ABT39_00024887 ABT39_00102286 ABT39_00108568 ABT39_00122613"
+# export Q903_GENES="E0M31_00027086 E0M31_00027087 E0M31_00055415 E0M31_00093276 E0M31_00093277"
+# export WS77111_GENES="DB47_00018419 DB47_00018420 DB47_00018421 DB47_00018422 DB47_00018423 DB47_00018424 DB47_00028544 DB47_00044066 DB47_00073581 DB47_00073614 DB47_00080438"
+# export ANURANS="calboguttata omargaretae pnigromaculatus rpipiens rtemporaria xallofraseri xborealis xlaevis xlargeni xtropicalis"
+# export HYMENOPTERA="acerana aechinatior ccastaneus nvitripennis nvitripennis_venom omonticola pbarbatus trugatulus"
+
+
+#------------------------
 # Custom prompt
+#------------------------
 # PS1="[ \[\e[1;36m\]\u\[\e[33m\]@\[\e[35m\]\h\[\e[33m\]:\[\e[32m\] \W \[\e[0m\]] \$\[\e[0m\] "
 BLUE="\[\033[1;36m\]"
 YELLOW="\[\033[33m\]"
@@ -11,145 +64,122 @@ PURPLE="\[\033[35m\]"
 GREEN="\[\033[32m\]"
 WHITE="\[\033[0m\]"
 PS1="$WHITE[ $BLUE\u$YELLOW@$PURPLE\h$YELLOW: $GREEN\w $WHITE] $WHITE\$ "
+
+#------------------------
+# VI
+#------------------------
 # set VI navigation for bash commandline
 # set -o vi
+
+#------------------------
+# WINDOW SIZE
+#------------------------
+
 shopt -s checkwinsize
-# Source global definitions
-# Commonly used variables
-# export TISSUES="bark embryo flush_bud mature_needle megagametophyte seed_germination xylem young_buds"
-# export STONECELL="Cort_Par Dev_SC"
-# export WPW="control gallery wound"
-# export PG29_GENES="ABT39_00024884 ABT39_00024885 ABT39_00024887 ABT39_00102286 ABT39_00108568 ABT39_00122613"
-# export Q903_GENES="E0M31_00027086 E0M31_00027087 E0M31_00055415 E0M31_00093276 E0M31_00093277"
-# export WS77111_GENES="DB47_00018419 DB47_00018420 DB47_00018421 DB47_00018422 DB47_00018423 DB47_00018424 DB47_00028544 DB47_00044066 DB47_00073581 DB47_00073614 DB47_00080438"
 
-# rearrange alphabetically
-export ANURANS="calboguttata omargaretae pnigromaculatus rpipiens rtemporaria xallofraseri xborealis xlaevis xlargeni xtropicalis"
-# export ANURANS="rtemporaria xlaevis calboguttata rpipiens xborealis xallofraseri xlargeni pnigromaculatus xtropicalis omargaretae"
-# export HYMENOPTERA="aechinatior amellifera acerana cobscurior omonticola nvitripennis nvitripennis_venom pbarbatus trugatulus ccastaneus"
-# arrange alphabetically
-# export HYMENOPTERA="acerana aechinatior amellifera ccastaneus cobscurior nvitripennis nvitripennis_venom omonticola pbarbatus trugatulus"
+#------------------------
+# ALIAS
+#------------------------
 
-# remove single end read organisms
-export HYMENOPTERA="acerana aechinatior ccastaneus nvitripennis nvitripennis_venom omonticola pbarbatus trugatulus"
-
-
-export PATH=$(getconf PATH)
-
-if [[ "$HOSTNAME" == dlin02* ]]
+# Numbers cluster aliases
+if [[ "$HOSTNAME" == n* ]]
 then
-#	export PATH="/home/dlin/miniconda3/bin:$PATH"  # commented out by conda initialize
-	export PATH="~/src/IGV_2.8.0:$PATH"
-	export PATH="/home/dlin/.homebrew/bin:$PATH"
-	export PATH="~/bin:$PATH"
-#	export PATH="/gsc/btl/linuxbrew/Cellar/igv/2.4.14/bin:$PATH"
-#	export PATH="/home/dlin/Documents/IGV_2.4.14:$PATH"
-#	alias igv='igv.sh'
-#	export PATH="/projects/btl/dlin/scripts:$PATH"
-	export LSCOLORS=Efgxcxdxcxegadabagacad
-	export PATH="$PATH:/projects/btl/dlin/bin"
-
-	export HOMEBREW_NO_AUTO_UPDATE=1
-	cd /projects/amp/
-	cd /projects/btl/dlin
-	cd /home/dlin/Documents
-	cd /home/dlin/Desktop
-	cd /home/dlin
-	##   __     __   __           ___
-	##  |__) | /  \ /__` \ / |\ |  |   /\  \_/
-	##  |__) | \__/ .__/  |  | \|  |  /~~\ / \
-	##  =======================================
-	##
-	## Syntax Highlighting for computational biology bp.append
-	## v0.1
-	##
-	## Append this to your ~/.bashprofile in MacOS
-	## to enable source-highlight for less and add
-	## bioSyntax pipe capability on your command line
-	##
-	#export HIGHLIGHT="/usr/local/opt/source-highlight/share/source-highlight"
-	export LESSOPEN="| /home/dlin/.homebrew/bin/src-hilite-lesspipe.sh %s"
-	export LESS=" -R "
-
-	alias less='less -NSi -# 10'
-	# -N: add line numbers
-	# -S: don't wrap lines (force to single line)
-	# -# 10: Horizontal scroll distance
-
-	alias more='less'
-
-	# Explicit call of  <file format>-less for piping data
-	# i.e:  samtools view -h aligned_hits.bam | sam-less
-	# Core syntaxes (default)
-	alias clustal-less='source-highlight -f esc --lang-def=clustal.lang --outlang-def=bioSyntax.outlang     --style-file=fasta.style | less'
-	alias bed-less='source-highlight     -f esc --lang-def=bed.lang     --outlang-def=bioSyntax.outlang     --style-file=sam.style   | less'
-	alias fa-less='source-highlight      -f esc --lang-def=fasta.lang   --outlang-def=bioSyntax.outlang     --style-file=fasta.style | less'
-	alias fq-less='source-highlight      -f esc --lang-def=fastq.lang   --outlang-def=bioSyntax.outlang     --style-file=fasta.style | less'
-	alias gtf-less='source-highlight     -f esc --lang-def=gtf.lang     --outlang-def=bioSyntax-vcf.outlang --style-file=vcf.style   | less'
-	alias pdb-less='source-highlight     -f esc --lang-def=pdb.lang     --outlang-def=bioSyntax-vcf.outlang --style-file=pdb.style   | less'
-	alias sam-less='source-highlight     -f esc --lang-def=sam.lang     --outlang-def=bioSyntax.outlang     --style-file=sam.style   | less'
-	alias vcf-less='source-highlight     -f esc --lang-def=vcf.lang     --outlang-def=bioSyntax-vcf.outlang --style-file=vcf.style   | less'
-	alias bam-less='sam-less'
-
-	# Auxillary syntaxes (uncomment to activate)
-	alias fai-less='source-highlight      -f esc --lang-def=faidx.lang    --outlang-def=bioSyntax.outlang   --style-file=sam.style   | less'
-	alias flagstat-less='source-highlight -f esc --lang-def=flagstat.lang --outlang-def=bioSyntax.outlang   --style-file=sam.style   | less'
-
-# export PATH="/home/dlin/miniconda3/bin:$PATH"  # commented out by conda initialize
-else
-
-	export PATH=/projects/btl/dlin/bin/backup/miniconda3/bin/:$PATH
-	export PATH=/gsc/btl/linuxbrew/bin:$PATH # path to Linuxbrew binaries - put it at the front
-#	export PATH=$PATH:/gsc/btl/linuxbrew/bin # path to Linuxbrew binaries - put it at the END
-#	export PATH=$PATH:/projects/btl/dlin/scripts # path to scripts I wrote
-	export PATH=$PATH:/projects/btl/dlin/bin # path to binaries and scripts I didn't write
-	export PATH=$PATH:/projects/btl/dlin/bin/miniconda3/bin # path to miniconda
-#	export PATH="/gsc/btl/linuxbrew/Cellar/r/3.5.1/bin:$PATH" # path to R in linuxbrew
-	export PATH=$PATH:/projects/btl/lcoombe/bin/gmap-2017-11-15_hpce/gmap-2017-11-15/bin
-	#export PATH="/projects/btl/lcoombe/bin/bbt/v2.2.0/bin:$PATH" #path to BioBloomTools
-#	export PATH="/projects/btl/dlin/bin/IGV_2.4.14:$PATH" # path to IGV
-# export PATH="/projects/btl/dlin/bin/miniconda3/bin:$PATH"  # commented out by conda initialize
-	export PATH=$PATH:/gsc/btl/linuxbrew/Cellar/abyss/2.1.1-k128/bin
-	export PATH=$PATH:/home/pubseq/BioSw/phrap/current
-	export PATH=$PATH:/gsc/software/linux-x86_64-centos6/dsrc-2.0.2
-	export PATH=$PATH:/gsc/software/scripts
-	export PATH=$PATH:/gsc/software/linux-x86_64-centos6/spec-1.3.2
-	alias dt='top -u dlin'
-
-	# mount all relevant volumes
-	cd /projects/amp/peptaid
+	alias jobs='squeue -u dlin'
 fi
 
-# User specific aliases and functions
-alias dtl='top -n 1 -b -u dlin | less'
-alias wmi='readlink -f $(pwd)'
-#alias top='top -n 1 -b | less'
-alias dlb='cd /projects/btl/dlin/bin/'
-alias dls='cd /projects/btl/dlin/scripts/'
-alias dl='cd /projects/btl/dlin/'
-#alias path='readlink -f'
-alias vimr='vim -M'
-alias tsv="column -t -s$'\t'"
-alias rmdiff='grep -Fvxf'
-alias time_it='/usr/bin/time -pv'
+# MAC ALIASES
 if [[ "$HOSTNAME" == dlin02* ]]
 then
-#	alias ls='ls -FhG'
 	alias ls='ls -hG'
 	alias dt='top -U dlin'
-	alias resize='COLUMNS=$(/usr/bin/tput cols); LINES=$(/usr/bin/tput lines); export COLUMNS LINES; echo "Resized."'
+	alias resize='COLUMNS=$(/usr/bin/tput cols) && LINES=$(/usr/bin/tput lines) && export COLUMNS LINES && echo "Resized."'
 	alias sed='/home/dlin/.homebrew/opt/gnu-sed/libexec/gnubin/gsed'
 	alias igv='/Users/dlin/src/IGV_2.8.0/igv.sh'
 	alias vim='/Users/dlin/vim/src/vim'
-	export VIMRUNTIME=/Users/dlin/vim/runtime
+
+# LINUX ALIASES
 else
 	alias ls='ls -h --color=auto'
 	alias vim='/gsc/btl/linuxbrew/bin/vim'
-
+	alias dtl='top -n 1 -b -u dlin | less'
+	alias wmi='readlink -f $(pwd)'
+	alias vimr='vim -M'
+	alias tsv="column -t -s$'\t'"
+	alias rmdiff='grep -Fvxf'
+	alias time_it='/usr/bin/time -pv'
+	alias dt='top -u dlin'
+	alias resize='/usr/bin/resize > /dev/null && echo "Resized."'
 fi
-#alias cd='cdd'
 
-# UPDATE BINARIES
+#------------------------
+# PATHS
+#------------------------
+# default path, but should be included in PATH above
+export PATH=$(getconf PATH)
+export PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:$PATH"
+
+# PATHS on MAC
+if [[ "$HOSTNAME" == dlin02* ]]
+then
+	IGV_MAC_PATH="~/src/IGV_2.8.0"
+	HOMEBREW_PATH="/home/dlin/.homebrew/bin"
+
+	export PATH="$PATH:$IGV_MAC_PATH:$HOMEBREW_PATH"
+
+# LINUX PATHS
+else
+	LINUXBREW_PATH="/gsc/btl/linuxbrew/bin"
+	MY_SCRIPTS_PATH="/projects/btl/dlin/scripts"
+	MINICONDA_PATH="/projects/btl/dlin/src/miniconda3/bin"
+	GMAP_PATH="/projects/btl/lcoombe/bin/gmap-2017-11-15_hpce/gmap-2017-11-15/bin"
+	MY_BIN_PATH="/projects/btl/dlin/bin"
+	LINUXBREW_R="/gsc/btl/linuxbrew/Cellar/r/3.5.1/bin"
+	BBT_PATH="/projects/btl/lcoombe/bin/bbt/v2.2.0/bin"
+	IGV_PATH="/projects/btl/dlin/bin/IGV_2.4.14"
+	ABYSS_PATH="/gsc/btl/linuxbrew/Cellar/abyss/2.1.1-k128/bin"
+	PUBSEQ_PATH="/home/pubseq/BioSw/phrap/current"
+	DRSC_PATH="/gsc/software/linux-x86_64-centos6/drsc-2.0.2"
+	SPEC_PATH="/gsc/software/linux-x86_64-centos6/spec-1.3.2"
+	GSC_SCRIPTS="/gsc/software/scripts"
+	
+	export PATH="$PATH:$MINICONDA_PATH:$LINUXBREW_PATH:$MY_BIN_PATH:$MY_SCRIPTS_PATH"
+fi
+
+#----------------------
+# FUNCTIONS
+#----------------------
+function job() {
+	if [[ "$HOSTNAME" == n* ]]
+	then
+		if [[ "$#" -eq 0 ]]
+		then
+			echo "ERROR: No job ID provided." 1>&2
+			return
+		fi
+
+		for i in "$@"
+		do
+			job_name=$(scontrol show job $i | grep 'JobName=' | awk -F "=" '{print $NF}')
+			if [[ "${PIPESTATUS[0]}" -eq 0 ]]
+			then
+				output=$(scontrol show job $i | grep 'StdErr=' | awk -F "=" '{print $NF}' | sed "s/%x/$job_name/")
+				less $output
+			else
+				echo "ERROR: The job ID provided does not exist." 1>&2
+			fi
+		done
+	else
+		echo "You are not on numbers." 1>&2
+		return
+	fi
+}
+
+function aa() {
+	word=$(echo "$*" | tr -d ' ')
+	echo ${word^^}
+}
+
+# UPDATE the bin directory
 function update() {
 	for dir in $(ls -d /projects/btl/dlin/scripts/*)
 	do
@@ -157,28 +187,36 @@ function update() {
 	done
 }
 
+# GET THE SHORTEST FILE EXTENSION
 function getExt() {
 var=$1
 echo ${var##*.}
 }
 
+# GET THE LONGEST FILE EXTENSION
 function getLongExt() {
 var=$1
 echo ${var#*.}
 }
 
+# GET THE LONGEST FILENAME (I.E. THE FILENAME THAT GOES WITH THE SHORTEST EXTENSION)
 function getName() {
 var=$1
 echo ${var%.*}
 }
 
+# GET THE SHORTEST FILENAME
 function getShortName() {
 var=$1
 echo ${var%%.*}
 }
+
+# MOVE ITEM TO TRASH (SAFER THAN RM)
 function trash() {
 	mv $* ~/.Trash
 }
+
+# GET CORRESPONDING GENOTYPE DIR (PARALLEL DIR ACROSS ALL SPECIES)
 function genotype() {
 
 	if [[ "$#" -eq 1 ]]
@@ -317,6 +355,8 @@ function genotype() {
 			;;
 	esac
 }
+
+# GET FULL PATH 
 function path() {
 	if [[ "$HOSTNAME" != dlin02* ]]
 	then
@@ -346,6 +386,7 @@ function path() {
 	fi
 }
 
+# CD TO DIRNAME OF GIVEN FILE
 function cdd() {
 	if [[ "$1" == */ ]]
 	then
@@ -372,6 +413,8 @@ function cdd() {
 
 	cd $dir
 }
+
+# FIND MAX
 function max() {
 	if [[ -z "$1" ]]
 	then
@@ -383,6 +426,7 @@ function max() {
 	echo "$file" | sort -g -r | head -n1
 }
 
+# FIND MIN
 function min() {
 	if [[ -z "$1" ]]
 	then
@@ -393,6 +437,8 @@ function min() {
 
 	echo "$file" | sort -g | head -n1
 }
+
+# COPY TO NEW EXT
 function cpy() {
 	file=$1
 	ext=$2
@@ -401,6 +447,7 @@ function cpy() {
 		cp $file{,-$ext}
 	fi
 }
+# CONVERT SAM TO BAM, SORT, THEN INDEX
 function bam() {
 	if [[ -z "$1" ]]
 	then
@@ -414,6 +461,8 @@ function bam() {
 		samtools index -@ 128 ${filename}.sorted.bam
 	fi
 }
+
+# IGV SHORTCUT WITH GFF
 function see() {
 	scaffold=$1
 	fasta=${scaffold}.scaffold.fa
@@ -438,26 +487,31 @@ function see() {
 	/gsc/btl/linuxbrew/bin/igv -g $fasta $gff
 }
 
+# UNLINK DIRECTORIES
 function uln() {
 	dir=$(echo $1 | sed 's/\/$//')
 	unlink $dir
 }
 
-
+# ADD X NUMBER OF Ns
 function putN() {
 	for i in $(seq 1 $1)
 	do
 		echo -n "N"
 	done
 }
+# PRINT NUMBER OF Ns
 function getN() {
 	seqtk comp $1 | awk '{print $9}'
 }
+
+# ACTIVATE JUPYTER NOTEBOOK
 function jn() {
 	cd ~
 	jupyter notebook --no-browser --ip=0.0.0.0
 }
 
+# JIRA FORMAT OUTPUT
 function jira() {
 	if [[ -z "$1" ]]
 	then
@@ -486,6 +540,7 @@ function jira() {
 #	cat $file |tr '\t' \| | perl -ne 'chomp; if(!defined $ct){@a=split(/\|/); print "||"; foreach my $e (@a){print "$e||"} print "\n";$ct=1;} else{print "|$_|\n";} '
 #}
 
+# LENGTH OF SEQUENCE
 function len() {
 	fasta=$1
 	if [[ "$(grep -c '^>' $fasta)" -eq 1 ]]
@@ -498,16 +553,18 @@ function len() {
 	#tail -n 1 $fasta | head -c -1 | wc -m
 }
 
+# GET FASTA HEADER NAME
 function id() {
 	fasta=$1
 	awk '/^>/ {print $1}' $fasta | sed 's/^>//g'
 }
 
+# GET LETTER COUNT
 function lc() {
 	echo -n "$1" | wc -m
 }
 
-#RETURNS PROTEIN NAME GIVEN PARTIAL NAME, I.E. SEARCHING BY SCAFFOLD IN A TRANSCRIPT FILE, CAN BE INFILED TO SEQTK SUBSEQ
+# RETURNS PROTEIN NAME GIVEN PARTIAL NAME, I.E. SEARCHING BY SCAFFOLD IN A TRANSCRIPT FILE, CAN BE INFILED TO SEQTK SUBSEQ
 function partial() {
 	file=$1
 	shift
@@ -517,7 +574,7 @@ function partial() {
 		grep $i $file | awk -F ">" '{print $2}' | awk '{print $1}'
 	done | seqtk subseq $file -
 }
-#SAME AS S2T BUT RETURNS WHOLE LINE
+# SAME AS S2T BUT RETURNS WHOLE LINE
 # function s2l() {
 # 	file=$1
 # 	shift
@@ -527,7 +584,7 @@ function partial() {
 # 		grep $i $file | awk -F ">" '{print $2}'
 # 	done
 # }
-#SAME AS SEQTK SUBSEQ, BUT CAN BE SEARCHED WITH PARTIAL NAME (SIMILAR TO ABOVE)
+# SAME AS SEQTK SUBSEQ, BUT CAN BE SEARCHED WITH PARTIAL NAME (SIMILAR TO ABOVE)
 # function partial() {
 # 	file=$1
 # 	shift
@@ -537,16 +594,19 @@ function partial() {
 # 		awk -v var="$i" '$0 ~ var {x=NR+1}(NR<=x){print}' $file
 # 	done
 # }
+# SEQUENCE COUNT
 function sc() {
 	file=$1
 	grep -c '^>' $file
 }
 
+# GET REVERSE COMPLEMENT
 function rc() {
 	sequence=$1
 	tail -n 1 <(seqtk seq -r <(echo -e ">header\n$1"))
 }
 
+# GET READ LENGTH
 function pet() {
 	hiseq=$1
 	for line in $(cat $hiseq)
@@ -555,6 +615,7 @@ function pet() {
 	done
 }
 
+# SUM NUMBERS
 function add() {
 	numbers=$@
 	sum=0
@@ -563,7 +624,8 @@ function add() {
 		sum=$((sum+num))
 	done
 }
-# convert one liner to R vector
+
+# CONVERT ONE LINER TO R VECTOR
 function vector() {
 	if [[ -p "/dev/stdin" && "$#" -lt 1 ]]
 	then
@@ -576,6 +638,7 @@ function vector() {
 	fi
 }
 
+# GET LINE OF FILE GIVEN LINE NUMBER
 function line() {
 	if [[ "$#" -ne 2 ]]
 	then
@@ -588,47 +651,8 @@ function line() {
 	fi
 }
 
-# MAN PAGE COLOR CODING
-export LESS_TERMCAP_mb=$'\E[01;31m'
-# export LESS_TERMCAP_mb=$'\e[1;32m'
-export LESS_TERMCAP_md=$'\E[01;33m'
-# export LESS_TERMCAP_md=$'\e[1;32m'
-export LESS_TERMCAP_me=$'\E[0m'
-# export LESS_TERMCAP_me=$'\e[0m'
-export LESS_TERMCAP_se=$'\E[0m'
-# export LESS_TERMCAP_se=$'\e[0m'
-export LESS_TERMCAP_so=$'\E[01;42;30m'
-# export LESS_TERMCAP_so=$'\e[01;33m'
-export LESS_TERMCAP_ue=$'\E[0m'
-# export LESS_TERMCAP_ue=$'\e[0m'
-export LESS_TERMCAP_us=$'\E[01;36m'
-# export LESS_TERMCAP_us=$'\e[1;4;31m'
 
-umask ug+rw
-
-# XMATCHVIEW FONTS
-# /projects/btl/lcoombe/git/xmatchview/tarballs/fonts
-
-
-
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/projects/btl/dlin/bin/backup/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]
-then
-	eval "$__conda_setup"
-else
-	if [ -f "/projects/btl/dlin/bin/backup/miniconda3/etc/profile.d/conda.sh" ]
-	then
-		. "/projects/btl/dlin/bin/backup/miniconda3/etc/profile.d/conda.sh"
-    else
-		export PATH="/projects/btl/dlin/bin/backup/miniconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
-
-# alias git='git pull; git'
+# SEARCH FOR TOOLNAME IN LINUXBREW
 function search() {
 	if [[ "$#" -ne 1 ]]
 	then
@@ -637,3 +661,122 @@ function search() {
 	fi
 		grep -i $1 <(ls /gsc/btl/linuxbrew/bin)
 }
+
+#-------------------------
+# CONDA SETUP FOR LINUX
+#-------------------------
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/projects/btl/dlin/src/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/projects/btl/dlin/src/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/projects/btl/dlin/src/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/projects/btl/dlin/src/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+# conda config --set auto_activate_base false
+
+
+#-----------------------
+# MAC STARTUP
+#-----------------------
+if [[ "$HOSTNAME" == dlin02* ]]
+then
+	# Do not update homebrew
+	export HOMEBREW_NO_AUTO_UPDATE=1
+
+	# Customize ls colours
+	export LSCOLORS=exgxcxdxcxegadabagacad
+
+	# Customize vim
+	export VIMRUNTIME=/Users/dlin/vim/runtime
+
+	# Mount volumes
+	cd /projects/amp/
+	cd /projects/btl/dlin
+	cd /home/dlin/Documents
+	cd /home/dlin/Desktop
+	cd /home/dlin
+
+	# Resize the window upon startup
+	resize > /dev/null
+	COLUMNS=$(/usr/bin/tput cols) && LINES=$(/usr/bin/tput lines) && export COLUMNS LINES
+	# BIOSYNTAX
+
+	##   __     __   __           ___
+	##  |__) | /  \ /__` \ / |\ |  |   /\  \_/
+	##  |__) | \__/ .__/  |  | \|  |  /~~\ / \
+	##  =======================================
+	##
+	## Syntax Highlighting for computational biology bp.append
+	## v0.1
+	##
+	## Append this to your ~/.bashprofile in MacOS
+	## to enable source-highlight for less and add
+	## bioSyntax pipe capability on your command line
+	##
+	#export HIGHLIGHT="/usr/local/opt/source-highlight/share/source-highlight"
+	export LESSOPEN="| /home/dlin/.homebrew/bin/src-hilite-lesspipe.sh %s"
+	export LESS=" -R "
+
+	alias less='less -NSi -# 10'
+	# -N: add line numbers
+	# -S: don't wrap lines (force to single line)
+	# -# 10: Horizontal scroll distance
+
+	alias more='less'
+
+	# Explicit call of  <file format>-less for piping data
+	# i.e:  samtools view -h aligned_hits.bam | sam-less
+	# Core syntaxes (default)
+	alias clustal-less='source-highlight -f esc --lang-def=clustal.lang --outlang-def=bioSyntax.outlang     --style-file=fasta.style | less'
+	alias bed-less='source-highlight     -f esc --lang-def=bed.lang     --outlang-def=bioSyntax.outlang     --style-file=sam.style   | less'
+	alias fa-less='source-highlight      -f esc --lang-def=fasta.lang   --outlang-def=bioSyntax.outlang     --style-file=fasta.style | less'
+	alias fq-less='source-highlight      -f esc --lang-def=fastq.lang   --outlang-def=bioSyntax.outlang     --style-file=fasta.style | less'
+	alias gtf-less='source-highlight     -f esc --lang-def=gtf.lang     --outlang-def=bioSyntax-vcf.outlang --style-file=vcf.style   | less'
+	alias pdb-less='source-highlight     -f esc --lang-def=pdb.lang     --outlang-def=bioSyntax-vcf.outlang --style-file=pdb.style   | less'
+	alias sam-less='source-highlight     -f esc --lang-def=sam.lang     --outlang-def=bioSyntax.outlang     --style-file=sam.style   | less'
+	alias vcf-less='source-highlight     -f esc --lang-def=vcf.lang     --outlang-def=bioSyntax-vcf.outlang --style-file=vcf.style   | less'
+	alias bam-less='sam-less'
+
+	# Auxillary syntaxes (uncomment to activate)
+	alias fai-less='source-highlight      -f esc --lang-def=faidx.lang    --outlang-def=bioSyntax.outlang   --style-file=sam.style   | less'
+	alias flagstat-less='source-highlight -f esc --lang-def=flagstat.lang --outlang-def=bioSyntax.outlang   --style-file=sam.style   | less'
+
+#---------------------
+# LINUX STARTUP
+#---------------------
+else
+	cd /projects/amp/peptaid
+	/usr/bin/resize &> /dev/null
+	source scripts/config.sh
+fi
+#---------------------
+# BOTH STARTUPS
+#---------------------
+	# MAN PAGE COLOR CODING
+	export LESS_TERMCAP_mb=$'\E[01;31m'
+	# export LESS_TERMCAP_mb=$'\e[1;32m'
+	export LESS_TERMCAP_md=$'\E[01;33m'
+	# export LESS_TERMCAP_md=$'\e[1;32m'
+	export LESS_TERMCAP_me=$'\E[0m'
+	# export LESS_TERMCAP_me=$'\e[0m'
+	export LESS_TERMCAP_se=$'\E[0m'
+	# export LESS_TERMCAP_se=$'\e[0m'
+	export LESS_TERMCAP_so=$'\E[01;42;30m'
+	# export LESS_TERMCAP_so=$'\e[01;33m'
+	export LESS_TERMCAP_ue=$'\E[0m'
+	# export LESS_TERMCAP_ue=$'\e[0m'
+	export LESS_TERMCAP_us=$'\E[01;36m'
+	# export LESS_TERMCAP_us=$'\e[1;4;31m'
+
+	# READ/WRITE PERMISSIONS FOR GROUP
+	umask ug+rw
+
