@@ -58,9 +58,9 @@ map <C-n> :NERDTreeToggle<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " Windows
-map <C-c> :vert term<CR>
-map <C-v> :vsp<CR>
-map <C-t> gt<CR>
+" map <C-c> :vert term<CR>
+" map <C-v> :vsp<CR>
+" map <C-t> gt<CR>
 " remove error sounds
 set noerrorbells visualbell t_vb=
 " map 'zt' to t, where current line becomes top line
@@ -118,6 +118,7 @@ hi User2 ctermfg=007 ctermbg=236 guibg=#303030 guifg=#adadad
 hi User3 ctermfg=236 ctermbg=236 guibg=#303030 guifg=#303030
 hi User4 ctermfg=239 ctermbg=239 guibg=#4e4e4e guifg=#4e4e4e
 
+" let g:AutoPairsShortcutFastWrap= '<C-a>'
 " Add spaces after comment delimiters by default
 let g:NERDSpaceDelims = 1
 
