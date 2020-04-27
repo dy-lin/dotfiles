@@ -1,56 +1,97 @@
-#PS1="\[\033[1;36m\]\u\[\033[33m\]@\[\033[35m\]\h\[\033[33m\]:\[\033[34m\]\w ' '\[\033[32m\]$' '"
-# PS1="\[\e[1;36m\]\u\[\e[33m\]@\[\e[35m\]\h\[\e[33m\]:\[\e[32m\]\w \[\e[0m\]\$\[\e[0m\] "
-# reset
-# PS1="\[$(tput bold)\][\[$(tput sgr0)\] \[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;14m\]\u\[$(tput sgr0)\]\[\033[38;5;11m\]@\[$(tput sgr0)\]\[\033[38;5;13m\]\h\[$(tput sgr0)\]\[\033[38;5;11m\]:\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;10m\]\W\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput bold)\]]\[$(tput sgr0)\] \[$(tput bold)\]\\$\[$(tput sgr0)\] \[$(tput sgr0)\]"
-# export PROMPT_COMMAND="resize &>/dev/null; $PROMPT_COMMAND"
-alias sed='/usr/local/bin/gsed'
-alias awk='/usr/local/bin/gawk'
-alias grep='/usr/local/bin/ggrep'
-
+#------------------------------------------------------------------------------#
+#                                     NOTES                                    #
+#------------------------------------------------------------------------------#
 # use VI for navigation on commandline bash
 # set -o vi
+# \fch <string> to create comment frame hash block
+# \cc <to comment currently highlihgted line (will depend on language for symbol)
+
+#------------------------------------------------------------------------------#
+#                                    EXPORTS                                   #
+#------------------------------------------------------------------------------#
+# To resize before every prompt
+# export PROMPT_COMMAND="resize &>/dev/null; $PROMPT_COMMAND"
+
+# silence the bash shell deprecation warning
 export BASH_SILENCE_DEPRECATION_WARNING=1
+export HOMEBREW_NO_AUTO_UPDATE=1
+export LDFLAGS="-L/usr/local/opt/readline/lib"
+export CPPFLAGS="-I/usr/local/opt/readline/include"
+# export LSCOLORS=ExFxBxDxCxegedabagacad
+export CLICOLOR=1
+export LSCOLORS=exGxcxdxcxeggdabagacad
+
+#------------------------------------------------------------------------------#
+#                                    EXPORTS                                   #
+#------------------------------------------------------------------------------#
+# alias sed='/usr/local/bin/gsed'
+# alias awk='/usr/local/bin/gawk'
+# alias grep='/usr/local/bin/ggrep'
+# alias find=/usr/local/bin/gfind'
+
+# alias to launch pc login
+alias pc='~/pc.exp'
+alias ls='ls -h'
+alias ytdl='~/youtube.sh'
+# alias sftp="with-readline sftp"
+alias unhide='hide -u'
+# alias sshh='ssh dlin@ssh.bcgsc.ca'
+# alias sftpp='sftp dlin@xfer.bcgsc.ca'
+alias ssh='gsc'
+alias sftp='gsc2'
+alias brew='/usr/local/Homebrew/bin/brew'
+
+#------------------------------------------------------------------------------#
+#                                    PROMPT                                    #
+#------------------------------------------------------------------------------#
 BLUE="\[\033[1;36m\]"
 YELLOW="\[\033[33m\]"
 PURPLE="\[\033[35m\]"
 GREEN="\[\033[32m\]"
 WHITE="\[\033[0m\]"
 
-PS1="$WHITE[ $BLUE\u$YELLOW@$PURPLE\h$YELLOW: $GREEN\w $WHITE] $WHITE\$ "
+PS1="${WHITE}[ ${BLUE}\u${YELLOW}@${PURPLE}\h${YELLOW}: ${GREEN}\w ${WHITE}] ${WHITE}\$ "
 
-shopt -s checkwinsize
-
+#------------------------------------------------------------------------------#
+#                                     PATHS                                    #
+#------------------------------------------------------------------------------#
+# BASE PATH
 export PATH="$(getconf PATH)"
-export PATH="/Users/dianalin/anaconda/bin:$PATH"
-export PATH="/usr/local/bin:$PATH"
-#export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
-export PATH="/usr/local/Homebrew/bin:$PATH"
-export PATH="~/bin:$PATH"
-export LDFLAGS="-L/usr/local/opt/readline/lib"
-export CPPFLAGS="-I/usr/local/opt/readline/include"
-#export LSCOLORS=ExFxBxDxCxegedabagacad
-export CLICOLOR=1
-export LSCOLORS=exGxcxdxcxeggdabagacad
-alias ls='ls -h'
-alias ytdl='~/youtube.sh'
-alias dl='sftp dlin@xfer.bcgsc.ca'
+MINICONDA_PATH="$HOME/anaconda/bin"
+HOMEBREW_PATH="/usr/local/bin"
+# export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+MY_BIN="$HOME/bin"
 
-function ez() {
-	if [[ "$#" -ne 1 ]]
-	then
-		echo "USAGE: ez <URL>" 1>&2
-		return
-	fi
-	open "https://ezproxy.library.ubc.ca/login?url=$1"
+GNU_BIN="/usr/local/opt/coreutils/libexec/gnubin"
+GNU_MAN="/usr/local/opt/coreutils/libexec/gnuman"
+
+GREP_BIN="/usr/local/opt/grep/libexec/gnubin"
+GREP_MAN="/usr/local/opt/grep/libexec/gnuman"
+
+SED_BIN="/usr/local/opt/gnu-sed/libexec/gnubin"
+SED_MAN="/usr/local/opt/gnu-sed/libexec/gnuman"
+
+AWK_BIN="/usr/local/opt/gawk/libexec/gnubin"
+AWK_MAN="/usr/local/opt/gawk/libexec/gnuman"
+
+FIND_BIN="/usr/local/opt/findutils/libexec/gnubin"
+FIND_MAN="/usr/local/opt/findutils/libexec/gnuman"
+
+export MANPATH=$GNU_MAN:$GREP_MAN:$SED_MAN:$AWK_MAN:$FIND_MAN:$MANPATH
+export PATH=$MINICONDA_PATH:$GNU_BIN:$GREP_BIN:$SED_BIN:$AWK_BIN:$FIND_BIN:$HOMEBREW_PATH:$MY_BIN:$PATH
+
+#------------------------------------------------------------------------------#
+#                                   FUNCTIONS                                  #
+#------------------------------------------------------------------------------#
+function j() {
+	url=$(pbpaste)
+	open "https://ezproxy.library.ubc.ca/login?url=$url"
 }
 
-
-export HOMEBREW_NO_AUTO_UPDATE=1
-# alias ls='ls -Fh'
-#alias sftp="with-readline sftp"
 function strip() {
 	echo "$1" | sed 's/^ *//' | sed 's/ *$//'
 }
+
 function hide() {
 	undo=false
 	local OPTIND
@@ -89,33 +130,20 @@ function hide() {
 	fi
 }
 
-alias unhide='hide -u'
-alias sshh='ssh dlin@ssh.bcgsc.ca'
-alias sftpp='sftp dlin@xfer.bcgsc.ca'
-
 function gsc() {
 	if [[ "$#" -eq 0 ]]
 	then
 		~/gsc.exp dlin02.phage.bcgsc.ca
-#	elif [[ "$1" == orca* ]]
-#	then
-#		~/orca.exp	
 	else
 		~/gsc.exp $1
 	fi
 }
 
-
-alias imac='~/imac.exp'
-
-function txt() {
-	cd ~/Downloads
-	for file in $(ls cm*.txt)
-	do
-		filename=$(basename $file ".txt")
-		mv $file ~/STAT545-participation/$filename
-	done
-	cd ~
+function gsc2() {
+	if [[ "$#" -eq 0 ]]
+	then
+		~/transfer.exp
+	fi
 }
 
 function add() {
@@ -148,30 +176,54 @@ function igvtools() {
 
 function resize() {
 	COLUMNS=$(tput cols)
-#	echo "COLUMNS=$COLUMNS;"
 	LINES=$(tput lines)
-#	echo "LINES=$LINES;"
 	export COLUMNS LINES;
-#	echo "export COLUMNS LINES;"
 	echo "Resized."
 }
 
-resize &> /dev/null
-# alias git='git pull 2> /dev/null; git'
+# echo "To update GitHub repos, please use 'pull'."
+function pull() {
+	for i in $(gfind ~ -maxdepth 3 -name ".git" 2> /dev/null | sort)
+	do
+		if [[ "$i" == "/Users/dianalin/dotfiles/.git" || "$i" == "/Users/dianalin/scripts/.git" ]]
+		then
+			continue
+		fi
+		cd $(dirname $i)
+		echo -n "$(basename $(dirname $i)): "
+		git pull
+		cd ~
+	done
+}
 
-alias ssh='gsc'
+# echo "To sync your fork with the upstream repo, please use 'sync'."
+function sync() {
+	git fetch upstream
+	git merge upstream/master
+}
+
+function upload() {
+	if [[ "$#" -ne 2 ]]
+	then
+		echo "USAGE: upload <LOCAL PATH> <REMOTE PATH>" 1>&2
+		return
+	fi
+	~/upload.exp $1 $2
+}
+
+
+function download() {
+	if [[ "$#" -ne 2 ]]
+	then
+		echo "USAGE: download <REMOTE PATH> <LOCAL PATH>" 1>&2
+		return
+	fi
+	~/download.exp $1 $2
+}
 
 #------------------------------------------------------------------------------#
-#                               Powerline Prompt                               #
+#                                   BIOSYNTAX                                  #
 #------------------------------------------------------------------------------#
-# export PATH=$PATH:/Users/dianalin/.local/bin
-# powerline-daemon -q
-# POWERLINE_BASH_CONTINUATION=1
-# POWERLINE_BASH_SELECT=1
-# # export PROMPT_COMMAND="hostname cwd"
-# source /Users/dianalin/.local/lib/python3.6/site-packages/powerline/bindings/bash/powerline.sh
-
-alias find='gfind'
 ##   __     __   __           ___
 ##  |__) | /  \ /__` \ / |\ |  |   /\  \_/
 ##  |__) | \__/ .__/  |  | \|  |  /~~\ / \
@@ -211,3 +263,20 @@ alias bam-less='sam-less'
 # Auxillary syntaxes (uncomment to activate)
 alias fai-less='source-highlight      -f esc --lang-def=faidx.lang    --outlang-def=bioSyntax.outlang   --style-file=sam.style   | less'
 alias flagstat-less='source-highlight -f esc --lang-def=flagstat.lang --outlang-def=bioSyntax.outlang   --style-file=sam.style   | less'
+
+#------------------------------------------------------------------------------#
+#                               POWERLINE PROMPT                               #
+#------------------------------------------------------------------------------#
+# export PATH=$PATH:/Users/dianalin/.local/bin
+# powerline-daemon -q
+# POWERLINE_BASH_CONTINUATION=1
+# POWERLINE_BASH_SELECT=1
+# # export PROMPT_COMMAND="hostname cwd"
+# source /Users/dianalin/.local/lib/python3.6/site-packages/powerline/bindings/bash/powerline.sh
+
+#------------------------------------------------------------------------------#
+#                                    STARTUP                                   #
+#------------------------------------------------------------------------------#
+resize &> /dev/null
+# check window size upon start up 
+shopt -s checkwinsize
