@@ -1,16 +1,22 @@
-" Colour scheme
+"------------------------------------------------------------------------------"
+"                                 COLOUR SCHEME                                "
+"------------------------------------------------------------------------------"
 syntax enable
 colorscheme molokai
 :syntax enable
 let g:airline_theme='powerlineish'
 
-" Spaces and tabs
+"------------------------------------------------------------------------------"
+"                                SPACES AND TABS                               "
+"------------------------------------------------------------------------------"
 set autoindent
 set tabstop=4
 set shiftwidth=4
 set noexpandtab
 
-" UI
+"------------------------------------------------------------------------------"
+"                                   UI CONFIG                                  "
+"------------------------------------------------------------------------------"
 set number
 set pastetoggle=<C-p>
 filetype indent on
@@ -29,7 +35,9 @@ set showcmd
 set lazyredraw
 " set report=0
 
-" Search settings
+"------------------------------------------------------------------------------"
+"                                SEARCH SETTINGS                               "
+"------------------------------------------------------------------------------"
 set ignorecase
 set smartcase
 set incsearch
@@ -38,7 +46,9 @@ set mouse=i
 set hlsearch
 map <C-h> :nohlsearch<CR>
 
-" Crutches
+"------------------------------------------------------------------------------"
+"                                   CRUTCHES                                   "
+"------------------------------------------------------------------------------"
 nnoremap <Left>  :echoe "Use h"<CR>
 nnoremap <Right> :echoe "Use l"<CR>
 nnoremap <Up>    :echoe "Use k"<CR>
@@ -49,22 +59,31 @@ inoremap <Right> <ESC>:echoe "Use l"<CR>
 inoremap <Up>    <ESC>:echoe "Use k"<CR>
 inoremap <Down>  <ESC>:echoe "Use j"<CR>
 
-" NERDTree
+"------------------------------------------------------------------------------"
+"                                   NERDTREE                                   "
+"------------------------------------------------------------------------------"
 " auto open NERDTree when opening vim
 " autocmd vimenter * NERDTree
 " open NERDTree using ctrl+n
 map <C-n> :NERDTreeToggle<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
-" Windows
+"------------------------------------------------------------------------------"
+"                                    WINDOWS                                   "
+"------------------------------------------------------------------------------"
 map <C-c> :vert term<CR>
 map <C-v> :vsp<CR>
 map <C-t>: gt<CR>
 
+"------------------------------------------------------------------------------"
+"                                 MISCELLANEOUS                                "
+"------------------------------------------------------------------------------"
 set noerrorbells visualbell t_vb= " remove error sounds
 map t zt<CR>
 
-" status bar colors
+"------------------------------------------------------------------------------"
+"                                  STATUS LINE                                 "
+"------------------------------------------------------------------------------"
 au InsertEnter * hi statusline guifg=black guibg=#d7afff ctermfg=black ctermbg=magenta
 au InsertLeave * hi statusline guifg=black guibg=#8fbfdc ctermfg=black ctermbg=cyan
 hi statusline guifg=black guibg=#8fbfdc ctermfg=black ctermbg=cyan
@@ -116,6 +135,9 @@ hi User2 ctermfg=007 ctermbg=236 guibg=#303030 guifg=#adadad
 hi User3 ctermfg=236 ctermbg=236 guibg=#303030 guifg=#303030
 hi User4 ctermfg=239 ctermbg=239 guibg=#4e4e4e guifg=#4e4e4e
 
+"------------------------------------------------------------------------------"
+"                                NERDCOMMENTING                                "
+"------------------------------------------------------------------------------"
 " Add spaces after comment delimiters by default
 let g:NERDSpaceDelims = 1
 

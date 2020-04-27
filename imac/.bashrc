@@ -4,10 +4,9 @@ if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
 
-#------------------------
-# NOTES
-#------------------------
-
+#------------------------------------------------------------------------------#
+#                                     NOTES                                    #
+#------------------------------------------------------------------------------#
 # echo "subject" | mail -s "Numbers Job" dlin@bcgsc.ca
 
 # XMATCHVIEW FONTS
@@ -40,10 +39,9 @@ fi
 # https://www.binarytides.com/linux-top-command/
 # https://www.redhat.com/sysadmin/customize-top-command
 
-#------------------------
-# GLOBAL VARIABLES
-#------------------------
-
+#------------------------------------------------------------------------------#
+#                               GLOBAL VARIABLES                               #
+#------------------------------------------------------------------------------#
 # export TISSUES="bark embryo flush_bud mature_needle megagametophyte seed_germination xylem young_buds"
 # export STONECELL="Cort_Par Dev_SC"
 # export WPW="control gallery wound"
@@ -53,10 +51,9 @@ fi
 # export ANURANS="calboguttata omargaretae pnigromaculatus rpipiens rtemporaria xallofraseri xborealis xlaevis xlargeni xtropicalis"
 # export HYMENOPTERA="acerana aechinatior ccastaneus nvitripennis nvitripennis_venom omonticola pbarbatus trugatulus"
 
-
-#------------------------
-# Custom prompt
-#------------------------
+#------------------------------------------------------------------------------#
+#                                    PROMPT                                    #
+#------------------------------------------------------------------------------#
 # PS1="[ \[\e[1;36m\]\u\[\e[33m\]@\[\e[35m\]\h\[\e[33m\]:\[\e[32m\] \W \[\e[0m\]] \$\[\e[0m\] "
 BLUE="\[\033[1;36m\]"
 YELLOW="\[\033[33m\]"
@@ -65,22 +62,20 @@ GREEN="\[\033[32m\]"
 WHITE="\[\033[0m\]"
 PS1="$WHITE[ $BLUE\u$YELLOW@$PURPLE\h$YELLOW: $GREEN\w $WHITE] $WHITE\$ "
 
-#------------------------
-# VI
-#------------------------
+#------------------------------------------------------------------------------#
+#                                      VI                                      #
+#------------------------------------------------------------------------------#
 # set VI navigation for bash commandline
 # set -o vi
 
-#------------------------
-# WINDOW SIZE
-#------------------------
-
+#------------------------------------------------------------------------------#
+#                                  WINDOW SIZE                                 #
+#------------------------------------------------------------------------------#
 shopt -s checkwinsize
 
-#------------------------
-# ALIAS
-#------------------------
-
+#------------------------------------------------------------------------------#
+#                                    ALIASES                                   #
+#------------------------------------------------------------------------------#
 # Numbers cluster aliases
 if [[ "$HOSTNAME" == n* ]]
 then
@@ -111,9 +106,9 @@ else
 	alias resize='/usr/bin/resize > /dev/null && echo "Resized."'
 fi
 
-#------------------------
-# PATHS
-#------------------------
+#------------------------------------------------------------------------------#
+#                                     PATHS                                    #
+#------------------------------------------------------------------------------#
 # default path, but should be included in PATH above
 export PATH=$(getconf PATH)
 export PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:$PATH"
@@ -145,9 +140,9 @@ else
 	export PATH="$PATH:$MINICONDA_PATH:$LINUXBREW_PATH:$MY_BIN_PATH:$MY_SCRIPTS_PATH"
 fi
 
-#----------------------
-# FUNCTIONS
-#----------------------
+#------------------------------------------------------------------------------#
+#                                   FUNCTIONS                                  #
+#------------------------------------------------------------------------------#
 function job() {
 	if [[ "$HOSTNAME" == n* ]]
 	then
@@ -662,10 +657,9 @@ function search() {
 		grep -i $1 <(ls /gsc/btl/linuxbrew/bin)
 }
 
-#-------------------------
-# CONDA SETUP FOR LINUX
-#-------------------------
-
+#------------------------------------------------------------------------------#
+#                             CONDA SETUP FOR LINUX                            #
+#------------------------------------------------------------------------------#
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$('/projects/btl/dlin/src/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
@@ -683,10 +677,9 @@ unset __conda_setup
 
 # conda config --set auto_activate_base false
 
-
-#-----------------------
-# MAC STARTUP
-#-----------------------
+#------------------------------------------------------------------------------#
+#                                  MAC STARTUP                                 #
+#------------------------------------------------------------------------------#
 if [[ "$HOSTNAME" == dlin02* ]]
 then
 	# Do not update homebrew
@@ -708,8 +701,10 @@ then
 	# Resize the window upon startup
 	resize > /dev/null
 	COLUMNS=$(/usr/bin/tput cols) && LINES=$(/usr/bin/tput lines) && export COLUMNS LINES
-	# BIOSYNTAX
 
+#------------------------------------------------------------------------------#
+#                                   BIOSYNTAX                                  #
+#------------------------------------------------------------------------------#
 	##   __     __   __           ___
 	##  |__) | /  \ /__` \ / |\ |  |   /\  \_/
 	##  |__) | \__/ .__/  |  | \|  |  /~~\ / \
@@ -750,17 +745,17 @@ then
 	alias fai-less='source-highlight      -f esc --lang-def=faidx.lang    --outlang-def=bioSyntax.outlang   --style-file=sam.style   | less'
 	alias flagstat-less='source-highlight -f esc --lang-def=flagstat.lang --outlang-def=bioSyntax.outlang   --style-file=sam.style   | less'
 
-#---------------------
-# LINUX STARTUP
-#---------------------
+#------------------------------------------------------------------------------#
+#                                 LINUX STARTUP                                #
+#------------------------------------------------------------------------------#
 else
 	cd /projects/amp/peptaid
 	/usr/bin/resize &> /dev/null
 	source scripts/config.sh
 fi
-#---------------------
-# BOTH STARTUPS
-#---------------------
+#------------------------------------------------------------------------------#
+#                                 BOTH STARTUPS                                #
+#------------------------------------------------------------------------------#
 	# MAN PAGE COLOR CODING
 	export LESS_TERMCAP_mb=$'\E[01;31m'
 	# export LESS_TERMCAP_mb=$'\e[1;32m'
@@ -779,4 +774,3 @@ fi
 
 	# READ/WRITE PERMISSIONS FOR GROUP
 	umask ug+rw
-
