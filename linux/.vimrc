@@ -1,15 +1,21 @@
-" Colour scheme
+"------------------------------------------------------------------------------"
+"                                 COLOUR SCHEME                                "
+"------------------------------------------------------------------------------"
 syntax enable
 colorscheme molokai
 :syntax enable
 let g:airline_theme="powerlineish"
-" Tabs and spaces
+"------------------------------------------------------------------------------"
+"                                TABS AND SPACES                               "
+"------------------------------------------------------------------------------"
 set autoindent
 set tabstop=4
 set shiftwidth=4
 set noexpandtab
 
-" UI Config
+"------------------------------------------------------------------------------"
+"                                   UI CONFIG                                  "
+"------------------------------------------------------------------------------"
 set number
 set pastetoggle=<C-p>
 filetype indent on
@@ -28,8 +34,9 @@ set lazyredraw
 set nocompatible
 set report=0
 
-" Search
-
+"------------------------------------------------------------------------------"
+"                                    SEARCH                                    "
+"------------------------------------------------------------------------------"
 set smartcase
 set incsearch
 set hlsearch
@@ -37,8 +44,9 @@ set hlsearch
 set mouse=i
 set <C-h> :nohlsearch<CR>
 
-
-" Crutches
+"------------------------------------------------------------------------------"
+"                                   CRUTCHES                                   "
+"------------------------------------------------------------------------------"
 nnoremap <Left>  :echoe "Use h"<CR>
 nnoremap <Right> :echoe "Use l"<CR>
 nnoremap <Up>    :echoe "Use k"<CR>
@@ -48,7 +56,9 @@ inoremap <Right> <ESC>:echoe "Use l"<CR>
 inoremap <Up>    <ESC>:echoe "Use k"<CR>
 inoremap <Down>  <ESC>:echoe "Use j"<CR>
 
-" NERDTree
+"------------------------------------------------------------------------------"
+"                                   NERDTREE                                   "
+"------------------------------------------------------------------------------"
 " auto open NERDTree when opening vim
 " autocmd vimenter * NERDTree
 " open NERDTree using ctrl+n
@@ -57,16 +67,24 @@ map <C-n> :NERDTreeToggle<CR>
 " Close vim if only window left is NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
-" Windows
+"------------------------------------------------------------------------------"
+"                                    WINDOWS                                   "
+"------------------------------------------------------------------------------"
 " map <C-c> :vert term<CR>
 " map <C-v> :vsp<CR>
 " map <C-t> gt<CR>
 " remove error sounds
+
+"------------------------------------------------------------------------------"
+"                                 MISCELLANEOUS                                "
+"------------------------------------------------------------------------------"
 set noerrorbells visualbell t_vb=
 " map 'zt' to t, where current line becomes top line
 map t zt<CR> 
 
-" status bar colors
+"------------------------------------------------------------------------------"
+"                                  STATUS LINE                                 "
+"------------------------------------------------------------------------------"
 au InsertEnter * hi statusline guifg=black guibg=#d7afff ctermfg=black ctermbg=magenta
 au InsertLeave * hi statusline guifg=black guibg=#8fbfdc ctermfg=black ctermbg=cyan
 hi statusline guifg=black guibg=#8fbfdc ctermfg=black ctermbg=cyan
@@ -118,10 +136,16 @@ hi User2 ctermfg=007 ctermbg=236 guibg=#303030 guifg=#adadad
 hi User3 ctermfg=236 ctermbg=236 guibg=#303030 guifg=#303030
 hi User4 ctermfg=239 ctermbg=239 guibg=#4e4e4e guifg=#4e4e4e
 
+"------------------------------------------------------------------------------"
+"                                   AUTOPAIRS                                  "
+"------------------------------------------------------------------------------"
 " let g:AutoPairsShortcutFastWrap= '<C-a>'
 " Add spaces after comment delimiters by default
 let g:NERDSpaceDelims = 1
 
+"------------------------------------------------------------------------------"
+"                                NERDCOMMENTING                                "
+"------------------------------------------------------------------------------"
 " Use compact syntax for prettified multi-line comments
 let g:NERDCompactSexyComs = 1
 
