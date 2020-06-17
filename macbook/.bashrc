@@ -66,26 +66,45 @@ HOMEBREW_PATH="/usr/local/bin"
 # export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 MY_BIN="$HOME/bin"
 
-GNU_BIN="/usr/local/opt/coreutils/libexec/gnubin"
-GNU_MAN="/usr/local/opt/coreutils/libexec/gnuman"
+# COREUTILS
+CORE_BIN="/usr/local/opt/coreutils/libexec/gnubin"
+CORE_MAN="/usr/local/opt/coreutils/libexec/gnuman"
 
+# GREP
 GREP_BIN="/usr/local/opt/grep/libexec/gnubin"
 GREP_MAN="/usr/local/opt/grep/libexec/gnuman"
 
+# GNU-SED
 SED_BIN="/usr/local/opt/gnu-sed/libexec/gnubin"
 SED_MAN="/usr/local/opt/gnu-sed/libexec/gnuman"
 
+# GAWK
 AWK_BIN="/usr/local/opt/gawk/libexec/gnubin"
 AWK_MAN="/usr/local/opt/gawk/libexec/gnuman"
 
+# FINDUTILS
 FIND_BIN="/usr/local/opt/findutils/libexec/gnubin"
 FIND_MAN="/usr/local/opt/findutils/libexec/gnuman"
 
-TEXLIVE_BIN="/Library/TeX/texbin"
-export MANPATH=$GNU_MAN:$GREP_MAN:$SED_MAN:$AWK_MAN:$FIND_MAN:$MANPATH
-export PATH=$TEXLIVE_BIN:$MINICONDA_PATH:$GNU_BIN:$GREP_BIN:$SED_BIN:$AWK_BIN:$FIND_BIN:$HOMEBREW_PATH:$MY_BIN:$PATH
+# GNU-GETOPT
+GETOPT_BIN="/usr/local/opt/gnu-getopt/libexec/gnubin"
+GETOPT_MAN="/usr/local/opt/gnu-getopt/libexec/gnuman"
 
-#------------------------------------------------------------------------------#
+# GNU-TAR
+TAR_BIN="/usr/local/opt/gnu-tar/libexec/gnubin"
+TAR_MAN="/usr/local/opt/gnu-tar/libexec/gnuman"
+
+# GNUTLS
+TOOLS_BIN="/usr/local/opt/gnutls/libexec/gnubin"
+TOOLS_MAN="/usr/local/opt/gnutls/libexec/gnuman"
+
+# GNU-INDENT
+INDENT_BIN="/usr/local/opt/gnu-indent/libexec/gnubin"
+INDENT_MAN="/usr/local/opt/gnu-indent/libexec/gnuman"
+
+TEXLIVE_BIN="/Library/TeX/texbin"
+export MANPATH=$CORE_MAN:$GREP_MAN:$SED_MAN:$AWK_MAN:$FIND_MAN:$INDENT_MAN:$TOOLS_MAN:$GETOPT_MAN:$TAR_MAN:$MANPATH
+export PATH=$TEXLIVE_BIN:$MINICONDA_PATH:$CORE_BIN:$GREP_BIN:$SED_BIN:$AWK_BIN:$FIND_BIN:$INDENT_BIN:$TOOLS_BIN:$GETOPT_BIN:$TAR_BIN:$HOMEBREW_PATH:$MY_BIN:$PATH #------------------------------------------------------------------------------#
 #                                   FUNCTIONS                                  #
 #------------------------------------------------------------------------------#
 function j() {
