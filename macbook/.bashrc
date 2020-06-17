@@ -29,6 +29,7 @@ export LSCOLORS=exGxcxdxcxeggdabagacad
 # alias grep='/usr/local/bin/ggrep'
 # alias find=/usr/local/bin/gfind'
 
+alias zoom='~/zoom.sh'
 # alias to launch pc login
 alias pc='~/pc.exp'
 alias ls='ls -h'
@@ -40,6 +41,9 @@ alias unhide='hide -u'
 alias ssh='gsc'
 alias sftp='gsc2'
 alias brew='/usr/local/Homebrew/bin/brew'
+alias reset_usb='sudo killall -STOP -c usbd'
+alias title="sed 's/.*/\L&/; s/[a-z]*/\u&/g'"
+alias sentence="sed 's/.*/\L&/; s/[a-z]*/\u&/'"
 
 #------------------------------------------------------------------------------#
 #                                    PROMPT                                    #
@@ -77,8 +81,9 @@ AWK_MAN="/usr/local/opt/gawk/libexec/gnuman"
 FIND_BIN="/usr/local/opt/findutils/libexec/gnubin"
 FIND_MAN="/usr/local/opt/findutils/libexec/gnuman"
 
+TEXLIVE_BIN="/Library/TeX/texbin"
 export MANPATH=$GNU_MAN:$GREP_MAN:$SED_MAN:$AWK_MAN:$FIND_MAN:$MANPATH
-export PATH=$MINICONDA_PATH:$GNU_BIN:$GREP_BIN:$SED_BIN:$AWK_BIN:$FIND_BIN:$HOMEBREW_PATH:$MY_BIN:$PATH
+export PATH=$TEXLIVE_BIN:$MINICONDA_PATH:$GNU_BIN:$GREP_BIN:$SED_BIN:$AWK_BIN:$FIND_BIN:$HOMEBREW_PATH:$MY_BIN:$PATH
 
 #------------------------------------------------------------------------------#
 #                                   FUNCTIONS                                  #
@@ -179,6 +184,9 @@ function resize() {
 	LINES=$(tput lines)
 	export COLUMNS LINES;
 	echo "Resized."
+	
+	# MAC built-in default is 80 cols x 24 rows
+	# Changing MY default to 63 cols x 18 rows
 }
 
 # echo "To update GitHub repos, please use 'pull'."
@@ -213,12 +221,29 @@ function upload() {
 
 
 function download() {
-	if [[ "$#" -ne 2 ]]
+	if [[ "$#" -ne 1  && "$#" -ne 2 ]]
 	then
-		echo "USAGE: download <REMOTE PATH> <LOCAL PATH>" 1>&2
+		echo "USAGE: download <REMOTE PATH> [LOCAL PATH]" 1>&2
 		return
 	fi
-	~/download.exp $1 $2
+
+	if [[ "$#" -eq 1 ]]
+	then
+		~/download.exp $1 $(pwd)
+	elif [[ "$#" -eq 2 ]]
+	then
+		~/download.exp $1 $2
+	fi
+}
+
+function sra() {
+	if [[ "$#" -ne 1 ]]
+	then
+		echo "USAGE: sra <REMOTE PATH>" 1>&2
+		return
+	fi
+	~/upload.exp /Users/dianalin/Downloads/SraRunTable.txt $1
+	rm /Users/dianalin/Downloads/SraRunTable.txt
 }
 
 #------------------------------------------------------------------------------#
