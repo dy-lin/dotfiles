@@ -50,7 +50,7 @@ fi
 # export WS77111_GENES="DB47_00018419 DB47_00018420 DB47_00018421 DB47_00018422 DB47_00018423 DB47_00018424 DB47_00028544 DB47_00044066 DB47_00073581 DB47_00073614 DB47_00080438"
 # export ANURANS="calboguttata omargaretae pnigromaculatus rpipiens rtemporaria xallofraseri xborealis xlaevis xlargeni xtropicalis"
 # export HYMENOPTERA="acerana aechinatior ccastaneus nvitripennis nvitripennis_venom omonticola pbarbatus trugatulus"
-
+export timestamp=$(date '+%Y%m%d_%H%M%S')
 #------------------------------------------------------------------------------#
 #                                    PROMPT                                    #
 #------------------------------------------------------------------------------#
@@ -72,6 +72,14 @@ PS1="$WHITE[ $BLUE\u$YELLOW@$PURPLE\h$YELLOW: $GREEN\w $WHITE] $WHITE\$ "
 #                                  WINDOW SIZE                                 #
 #------------------------------------------------------------------------------#
 shopt -s checkwinsize
+
+#------------------------------------------------------------------------------#
+#                                   EXPANSION                                  #
+#------------------------------------------------------------------------------#
+if [[ "$HOSTNAME" != dlin0* && "$(lsb_release -a | grep "Release:" | awk '{print $2}')" == 7* ]]
+then
+	shopt -s direxpand
+fi
 
 #------------------------------------------------------------------------------#
 #                                    ALIASES                                   #
@@ -104,14 +112,15 @@ else
 	alias time_it='/usr/bin/time -pv'
 	alias dt='top -u dlin'
 	alias resize='/usr/bin/resize > /dev/null && echo "Resized."'
+	# export PROMPT_COMMAND="resize &>/dev/null ; $PROMPT_COMMAND"
 fi
 
 #------------------------------------------------------------------------------#
 #                                     PATHS                                    #
 #------------------------------------------------------------------------------#
 # default path, but should be included in PATH above
-export PATH=$(getconf PATH)
-export PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:$PATH"
+# export PATH=$(getconf PATH)
+export PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
 
 # PATHS on MAC
 if [[ "$HOSTNAME" == dlin02* ]]
@@ -136,8 +145,16 @@ else
 	DRSC_PATH="/gsc/software/linux-x86_64-centos6/drsc-2.0.2"
 	SPEC_PATH="/gsc/software/linux-x86_64-centos6/spec-1.3.2"
 	GSC_SCRIPTS="/gsc/software/scripts"
-	
-	export PATH="$PATH:$MINICONDA_PATH:$LINUXBREW_PATH:$MY_BIN_PATH:$MY_SCRIPTS_PATH"
+#	if [[ "$HOSTNAME" == xfer* || "$HOSTNAME" == gphost* ]]
+#	if [[ "$(lsb_release -a | grep "Release:" | awk '{print $2}')" == 7*  || "$HOSTNAME" == xfer* ]]
+#	then
+#		export PATH="$MY_BIN_PATH:$PATH:$LINUXBREW_PATH:$MINICONDA_PATH:$MY_SCRIPTS_PATH"
+#	else
+#		export PATH="$MY_BIN_PATH:$LINUXBREW_PATH:$PATH:$MINICONDA_PATH:$MY_SCRIPTS_PATH"
+#	fi
+
+# Due to issues with linuxbrew whoami, ssh, and top, link those to $MY_BIN_PATH from /usr/bin, leaving linuxbrew first
+	export PATH="$MY_BIN_PATH:$LINUXBREW_PATH:$PATH:$MINICONDA_PATH:$MY_SCRIPTS_PATH"
 fi
 
 #------------------------------------------------------------------------------#
