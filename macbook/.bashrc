@@ -28,17 +28,18 @@ export LSCOLORS=exGxcxdxcxeggdabagacad
 # alias awk='/usr/local/bin/gawk'
 # alias grep='/usr/local/bin/ggrep'
 # alias find=/usr/local/bin/gfind'
-
+alias jn='jupyter notebook'
 alias zoom='~/zoom.sh'
 # alias to launch pc login
 alias pc='~/pc.exp'
-alias ls='ls -h'
+alias mbp='~/mbp.exp'
+alias ls='ls -h --color=auto'
 alias ytdl='~/youtube.sh'
 # alias sftp="with-readline sftp"
 alias unhide='hide -u'
 # alias sshh='ssh dlin@ssh.bcgsc.ca'
 # alias sftpp='sftp dlin@xfer.bcgsc.ca'
-alias ssh='gsc'
+# alias ssh='gsc'
 alias sftp='gsc2'
 alias brew='/usr/local/Homebrew/bin/brew'
 alias reset_usb='sudo killall -STOP -c usbd'
@@ -107,6 +108,42 @@ export MANPATH=$CORE_MAN:$GREP_MAN:$SED_MAN:$AWK_MAN:$FIND_MAN:$INDENT_MAN:$TOOL
 export PATH=$TEXLIVE_BIN:$MINICONDA_PATH:$CORE_BIN:$GREP_BIN:$SED_BIN:$AWK_BIN:$FIND_BIN:$INDENT_BIN:$TOOLS_BIN:$GETOPT_BIN:$TAR_BIN:$HOMEBREW_PATH:$MY_BIN:$PATH #------------------------------------------------------------------------------#
 #                                   FUNCTIONS                                  #
 #------------------------------------------------------------------------------#
+function ssh() {
+	if [[ "$#" -eq 0 ]]
+	then
+		gsc
+	elif [[ "$1" == hpce* || "$1" == hpcg* || "$1" == dlin* || "$1" == gphost* ]]
+	then
+		gsc
+	else
+		/usr/bin/ssh $1
+	fi
+}
+function reset_discord() {
+	cd ~/Library/Caches/
+	rm -rf com.hnc.Discord com.hnc.Discord.ShipIt
+}
+function hw() {
+	ass=$1
+	if [[ "$ass" != worksheet_0[0-9][ab] ]]
+	then
+		echo "Invalid worksheet name."
+		return
+	fi
+
+	if ! ls ~/stat545.stat.ubc.ca/content/source/${ass}/${ass}.ipynb &> /dev/null
+	then
+		echo "File not found."
+		return
+	fi
+	
+	cd ~/stat545.stat.ubc.ca/content
+	nbgrader generate_assignment --force $ass
+}
+function wordlist() {
+	cat $1 | sed 's/- //g' | tr '\n' ',' | sed 's/,$//' | pbcopy
+}
+
 function j() {
 	url=$(pbpaste)
 	open "https://ezproxy.library.ubc.ca/login?url=$url"

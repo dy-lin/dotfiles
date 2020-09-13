@@ -57,3 +57,19 @@ alias bam-less='sam-less'
 # Auxillary syntaxes (uncomment to activate)
 alias fai-less='source-highlight      -f esc --lang-def=faidx.lang    --outlang-def=bioSyntax.outlang   --style-file=sam.style   | less'
 alias flagstat-less='source-highlight -f esc --lang-def=flagstat.lang --outlang-def=bioSyntax.outlang   --style-file=sam.style   | less'
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/Users/dianalin/anaconda/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/Users/dianalin/anaconda/etc/profile.d/conda.sh" ]; then
+        . "/Users/dianalin/anaconda/etc/profile.d/conda.sh"
+    else
+        export PATH="/Users/dianalin/anaconda/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
