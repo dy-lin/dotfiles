@@ -1,0 +1,7 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =5
+let g:netrw_dirhist_1='/Users/dianalin'
+let g:netrw_dirhist_2='/Users/dianalin/STAT545-participation/cm011'
+let g:netrw_dirhist_3='/Users/dianalin/Desktop'
+let g:netrw_dirhist_4='/Users/dianalin'
+let g:netrw_dirhist_5='/Users/dianalin/Desktop'
