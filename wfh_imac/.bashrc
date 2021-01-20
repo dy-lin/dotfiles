@@ -28,10 +28,8 @@ export LSCOLORS=exGxcxdxcxeggdabagacad
 # alias awk='/usr/local/bin/gawk'
 # alias grep='/usr/local/bin/ggrep'
 # alias find=/usr/local/bin/gfind'
-alias zoom='~/zoom.sh'
-alias biotalk='~/zoom.sh biotalk'
-alias stat545='~/zoom.sh stat545'
 # alias to launch pc login
+alias rstudio='~/rstudio.exp'
 alias pc='~/pc.exp'
 alias ls='ls -h --color=auto'
 alias ytdl='~/youtube.sh'
@@ -45,6 +43,17 @@ alias brew='/usr/local/Homebrew/bin/brew'
 alias reset_usb='sudo killall -STOP -c usbd'
 alias title="sed 's/.*/\L&/; s/[a-z]*/\u&/g'"
 alias sentence="sed 's/.*/\L&/; s/[a-z]*/\u&/'"
+
+
+# ZOOM ALIASES
+alias zoom='~/zoom.sh'
+alias amp='~/zoom.sh amp && exit'
+alias biotalk='~/zoom.sh biotalk && exit'
+alias stat545='~/zoom.sh stat545 && exit'
+alias class='~/zoom.sh stat545 && exit'
+alias ta='~/zoom.sh ta && exit'
+alias sambina='~/zoom.sh sambina && exit'
+alias btl='~/zoom.sh btl && exit'
 #------------------------------------------------------------------------------#
 #                                    PROMPT                                    #
 #------------------------------------------------------------------------------#
@@ -63,6 +72,7 @@ PS1="${WHITE}[ ${BLUE}\u${YELLOW}@${PURPLE}\h${YELLOW}: ${GREEN}\w ${WHITE}] ${W
 export PATH="$(getconf PATH)"
 MINICONDA_PATH="$HOME/anaconda/bin"
 HOMEBREW_PATH="/usr/local/bin"
+UTIL_LINUX_PATH="/usr/local/opt/util-linux/bin"
 # export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 MY_BIN="$HOME/bin"
 
@@ -107,6 +117,8 @@ TEXLIVE_BIN="/Library/TeX/texbin"
 # OPENJDK
 JDK_BIN="/usr/local/opt/openjdk/bin"
 
+MAKE_BIN="/usr/local/opt/make/libexec/gnubin"
+
 # MINICONDA
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -124,14 +136,41 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 export MANPATH=$CORE_MAN:$GREP_MAN:$SED_MAN:$AWK_MAN:$FIND_MAN:$INDENT_MAN:$TOOLS_MAN:$GETOPT_MAN:$TAR_MAN:$MANPATH
-export PATH=$JDK_BIN:$TEXLIVE_BIN:$MINICONDA_PATH:$CORE_BIN:$GREP_BIN:$SED_BIN:$AWK_BIN:$FIND_BIN:$INDENT_BIN:$TOOLS_BIN:$GETOPT_BIN:$TAR_BIN:$HOMEBREW_PATH:$MY_BIN:$PATH
+export PATH=$MAKE_BIN:$JDK_BIN:$TEXLIVE_BIN:$MINICONDA_PATH:$UTIL_LINUX_PATH:$CORE_BIN:$GREP_BIN:$SED_BIN:$AWK_BIN:$FIND_BIN:$INDENT_BIN:$TOOLS_BIN:$GETOPT_BIN:$TAR_BIN:$HOMEBREW_PATH:$MY_BIN:$PATH
 
 #------------------------------------------------------------------------------#
 #                                   FUNCTIONS                                  #
 #------------------------------------------------------------------------------#
-function git_restore() {
-	git restore $(git status | awk '/modified:/ {print $2}')
+# function rstudio() {
+# 	~/rstudio.exp
+# 	open http://localhost:8787
+# }
+
+function knit() {
+	if [[ -f $1 ]]
+	then
+		if [[ "$1" == *.Rmd ]]
+		then
+			Rscript -e "rmarkdown::render('$1', 'github_document')"
+		else
+			echo "File $1 is not an Rmarkdown file." 1>&2
+		fi
+	else
+		echo "File $1 does not exist."  1>&2
+	fi
 }
+
+function git_restore() {
+	git restore $(git status | awk '/modified:/ {print $2}') 2> /dev/null
+	git restore $(git status | awk '/deleted:/ {print $2}') 2> /dev/null
+	git status
+}
+
+function git_add() {
+	git add $(git status | awk '/modified:/ {print $2}')
+	git status
+}
+
 function gen_ass() {
 	ass=$1
 	if [[ "$ass" != worksheet_0[0-9][ab] ]]
@@ -177,11 +216,17 @@ function jn() {
 		fi
 	elif [[ "$#" -eq 0 ]]
 	then
-		echo "USAGE: jn <source OR release> <worksheet_XXa>" 1>&2
+		echo "USAGE: jn [source OR release] <worksheet_XXa>" 1>&2
 	else
 		echo "ERROR: Invalid arguments." 1>&2
 		return
 	fi
+
+	cd ~/stat-545-instructor
+#	git checkout master
+	git pull
+	cd - &> /dev/null
+
 	if [[ "$kind" == "source" ]]
 	then
 		echo "Opening instructor version of ${ass}..." 1>&2
@@ -189,6 +234,130 @@ function jn() {
 		echo "Opening student version of ${ass}..." 1>&2
 	fi
 	jupyter notebook ~/stat-545-instructor/worksheets/${kind}/${ass}/${ass}.ipynb
+}
+
+function release() {
+
+	if [[ "$#" -eq 1 ]]
+	then
+		ass=$1
+		if [[ "$ass" != worksheet_0[0-9][ab] ]]
+		then
+			echo "ERROR: Invalid worksheet name." 1>&2
+			return
+		fi
+	elif [[ "$#" -eq 2 ]]
+	then
+		ass=$1
+		if [[ "$ass" != worksheet_0[0-9][ab] ]]
+		then
+			echo "ERROR: Invalid worksheet name." 1>&2
+			return
+		fi
+		version=$2
+		if [[ "$version" == [0-9].[0-9] ]]
+		then
+			:
+		elif [[ "$version" == [0-9] ]]
+		then
+			version="${version}.0"
+		fi
+	else
+		echo "ERROR: Incorrect number of arguments." 1>&2
+		return
+	fi
+
+	cd ~/stat-545-instructor
+	git checkout master
+	git pull
+	cd - &> /dev/null
+
+	cd ~/stat545.stat.ubc.ca/content/worksheets/
+	git checkout master
+	git pull
+
+	cp ~/stat-545-instructor/worksheets/release/${ass}/${ass}.ipynb .
+	git add ${ass}.ipynb
+	git commit -m "Release version ${version} of ${ass} to students"
+	git push
+	
+	cd - &> /dev/null
+}
+
+function rmd() {
+	if [[ "$#" -eq 2 ]]
+	then
+		case $1 in
+			solutions) loc=$1;;
+			milestone*) loc=$1;;
+			?) echo "ERROR: First argument must be 'milestoneX' or 'solutions'." 1>&2; return;;
+		esac
+		if [[ "$2" != *.Rmd ]]
+		then
+			item=${2}.Rmd
+		else
+			item=$2a
+		fi
+		if [[ ! -f ~/stat-545-instructor/collaborative-project/$loc/$item ]]
+		then
+			echo "ERROR: The file does not exist." 1>&2
+			echo "Did you mean:" 1>&2
+			count=1
+			for i in ~/stat-545-instructor/collaborative-project/$loc/*.Rmd
+			do
+				printf "\t%2d. " $count 
+				basename $i
+				count=$((count+1))
+			done
+			read -p "Number: " message
+
+			item=$(basename $(ls ~/stat-545-instructor/collaborative-project/$loc/*.Rmd | awk -v var=$message 'NR==var'))
+		fi
+	elif [[ "$#" -eq 1 ]]
+	then
+		loc="solutions"
+		if [[ "$1" != *.Rmd ]]
+		then
+			item=${1}.Rmd
+		else
+			item=$1
+		fi
+		if [[ ! -f ~/stat-545-instructor/collaborative-project/$loc/$item ]]
+		then
+			echo "ERROR: The file does not exist." 1>&2
+			echo "Did you mean:" 1>&2
+			count=1
+			for i in ~/stat-545-instructor/collaborative-project/$loc/*.Rmd
+			do
+				printf "\t%2d. " $count 
+				basename $i
+				count=$((count+1))
+			done
+			read -p "Number: " message
+
+			item=$(basename $(ls ~/stat-545-instructor/collaborative-project/$loc/*.Rmd | awk -v var=$message 'NR==var'))
+		fi
+	elif [[ "$#" -eq 0 ]]
+	then
+		echo "USAGE: rmd [milestoneX OR solutions] <*.Rmd>" 1>&2
+		return 
+	else
+		echo "ERROR: Invalid arguments." 1>&2
+		return
+	fi
+
+	cd ~/stat-545-instructor
+	git checkout master
+	git pull
+	cd - &> /dev/null
+
+	if [[ "$loc" == "solutions" ]]
+	then
+		echo "Opening the instructor version of $item..." 1>&2
+	else
+		echo "Opening the student version of $item..." 1>&2
+	fi
+		open ~/stat-545-instructor/collaborative-project/$loc/$item
 }
 
 function j() {
@@ -408,3 +577,5 @@ function sra() {
 resize &> /dev/null
 # check window size upon start up 
 shopt -s checkwinsize
+complete -d cd
+shopt -s direxpand
