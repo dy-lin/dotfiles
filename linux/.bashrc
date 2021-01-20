@@ -1,4 +1,8 @@
 # .bashrc
+if [[ "$HOSTNAME" != dlin02* ]]
+then	
+	export PKG_CONFIG_PATH=/gsc/btl/linuxbrew/Cellar/bash-completion@2/2.7/share/pkgconfig
+fi
 
 if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
@@ -50,7 +54,7 @@ fi
 # export WS77111_GENES="DB47_00018419 DB47_00018420 DB47_00018421 DB47_00018422 DB47_00018423 DB47_00018424 DB47_00028544 DB47_00044066 DB47_00073581 DB47_00073614 DB47_00080438"
 # export ANURANS="calboguttata omargaretae pnigromaculatus rpipiens rtemporaria xallofraseri xborealis xlaevis xlargeni xtropicalis"
 # export HYMENOPTERA="acerana aechinatior ccastaneus nvitripennis nvitripennis_venom omonticola pbarbatus trugatulus"
-export timestamp=$(date '+%Y%m%d_%H%M%S')
+export timestamp_format="date '+%Y%m%d_%H%M%S'"
 #------------------------------------------------------------------------------#
 #                                    PROMPT                                    #
 #------------------------------------------------------------------------------#
@@ -76,9 +80,15 @@ shopt -s checkwinsize
 #------------------------------------------------------------------------------#
 #                                   EXPANSION                                  #
 #------------------------------------------------------------------------------#
-if [[ "$HOSTNAME" != dlin0* && "$(lsb_release -a | grep "Release:" | awk '{print $2}')" == 7* ]]
+if [[ "$HOSTNAME" != dlin0* && "$HOSTNAME" != xfer* && "$(lsb_release -a | grep "Release:" | awk '{print $2}')" == 7* ]]
 then
+	# That is, $ROOT_DIR is expanded to /projects/amp/peptaid using TAB
 	shopt -s direxpand
+fi
+
+if [[ "$HOSTNAME" == n* ]]
+then
+	complete -d cd
 fi
 
 #------------------------------------------------------------------------------#
@@ -87,7 +97,8 @@ fi
 # Numbers cluster aliases
 if [[ "$HOSTNAME" == n* ]]
 then
-	alias jobs='squeue -u dlin'
+#	alias jobs='squeue -u dlin --format="%18i %9P %60j %8u %2t %10M %6D %R"'
+	alias jobs='squeue -u dlin --format="%9i %9P %$(( $(tput cols) / 3 ))j %8u %2t %10M %6D %R"'
 fi
 
 # MAC ALIASES
@@ -99,6 +110,7 @@ then
 	alias sed='/home/dlin/.homebrew/opt/gnu-sed/libexec/gnubin/gsed'
 	alias igv='/Users/dlin/src/IGV_2.8.0/igv.sh'
 	alias vim='/Users/dlin/vim/src/vim'
+	alias zoom='/Users/dlin/zoom.sh'
 
 # LINUX ALIASES
 else
@@ -112,24 +124,51 @@ else
 	alias time_it='/usr/bin/time -pv'
 	alias dt='top -u dlin'
 	alias resize='/usr/bin/resize > /dev/null && echo "Resized."'
+	alias sambina='cd /projects/btl_scratch/saninta/amp_pipeline'
 	# export PROMPT_COMMAND="resize &>/dev/null ; $PROMPT_COMMAND"
 fi
-
+	alias timestamp="date '+%Y%m%d_%H%M%S'"
+	alias pst='ps -o pid,cmd -p $(pgrep -d, -u $USER -P 1) ww'  # get parent/root processes (not branches)
+	
 #------------------------------------------------------------------------------#
 #                                     PATHS                                    #
 #------------------------------------------------------------------------------#
 # default path, but should be included in PATH above
 # export PATH=$(getconf PATH)
 export PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
+#------------------------------------------------------------------------------#
+#                             CONDA SETUP FOR LINUX                            #
+#------------------------------------------------------------------------------#
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+if [[ "$HOSTAME" != dlin02* ]]
+then
+	__conda_setup="$('/projects/btl/dlin/src/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+	if [ $? -eq 0 ]; then
+		eval "$__conda_setup"
+	else
+		if [ -f "/projects/btl/dlin/src/miniconda3/etc/profile.d/conda.sh" ]; then
+			. "/projects/btl/dlin/src/miniconda3/etc/profile.d/conda.sh"
+		else
+			export PATH="/projects/btl/dlin/src/miniconda3/bin:$PATH"
+		fi
+	fi
+	unset __conda_setup
+	# <<< conda initialize <<<
+fi
 
 # PATHS on MAC
 if [[ "$HOSTNAME" == dlin02* ]]
 then
 	IGV_MAC_PATH="~/src/IGV_2.8.0"
 	HOMEBREW_PATH="/home/dlin/.homebrew/bin"
-
-	export PATH="$PATH:$IGV_MAC_PATH:$HOMEBREW_PATH"
-
+	OPENJDK_PATH="/home/dlin/.homebrew/opt/openjdk/bin"
+	export PATH="$OPENJDK_PATH:$HOMEBREW_PATH:$PATH:$IGV_MAC_PATH"
+elif [[ "$HOSTNAME" == xfer* ]]
+then
+	LINUXBREW_PATH="/gsc/btl/linuxbrew/bin"
+	MINICONDA_PATH="/projects/btl/dlin/src/miniconda3/bin"
+	export PATH="$PATH:$LINUXBREW_PATH:$MINICONDA_PATH"
 # LINUX PATHS
 else
 	LINUXBREW_PATH="/gsc/btl/linuxbrew/bin"
@@ -154,12 +193,31 @@ else
 #	fi
 
 # Due to issues with linuxbrew whoami, ssh, and top, link those to $MY_BIN_PATH from /usr/bin, leaving linuxbrew first
+#	export PATH="$MY_BIN_PATH:$LINUXBREW_PATH:$PATH:$MINICONDA_PATH:$MY_SCRIPTS_PATH"
+# 	alias pip='/projects/btl/dlin/src/miniconda3/bin/pip'
+# 	alias python='/projects/btl/dlin/src/miniconda3/bin/python'
+# 	alias python3='/projects/btl/dlin/src/miniconda3/bin/python3'
+# 	alias ssh='/usr/bin/ssh'
+# 	alias top='/usr/bin/top'
+# 	alias whoami='/usr/bin/whoami'
+# 	alias perl='/gsc/btl/linuxbrew/bin/perl'
 	export PATH="$MY_BIN_PATH:$LINUXBREW_PATH:$PATH:$MINICONDA_PATH:$MY_SCRIPTS_PATH"
+#	export PATH="$PATH:$LINUXBREW_PATH:$MINICONDA_PATH"
 fi
 
 #------------------------------------------------------------------------------#
 #                                   FUNCTIONS                                  #
 #------------------------------------------------------------------------------#
+function git_add() {
+        git add $(git status | awk '/modified:/ {print $2}')
+        git status
+}
+
+function git_restore() {
+        git restore $(git status | awk '/modified:/ {print $2}')
+        git status
+}
+
 function job() {
 	if [[ "$HOSTNAME" == n* ]]
 	then
@@ -679,17 +737,17 @@ function search() {
 #------------------------------------------------------------------------------#
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/projects/btl/dlin/src/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/projects/btl/dlin/src/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/projects/btl/dlin/src/miniconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/projects/btl/dlin/src/miniconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
+# __conda_setup="$('/projects/btl/dlin/src/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+# if [ $? -eq 0 ]; then
+#     eval "$__conda_setup"
+# else
+#     if [ -f "/projects/btl/dlin/src/miniconda3/etc/profile.d/conda.sh" ]; then
+#         . "/projects/btl/dlin/src/miniconda3/etc/profile.d/conda.sh"
+#     else
+#         export PATH="/projects/btl/dlin/src/miniconda3/bin:$PATH"
+#     fi
+# fi
+# unset __conda_setup
 # <<< conda initialize <<<
 
 # conda config --set auto_activate_base false
@@ -766,9 +824,14 @@ then
 #                                 LINUX STARTUP                                #
 #------------------------------------------------------------------------------#
 else
-	cd /projects/amp/peptaid
+#	cd /projects/amp/peptaid
+#	cd /projects/amp/hackathon20
+	cd /projects/amp/rAMPage
 	/usr/bin/resize &> /dev/null
-	source scripts/config.sh
+	if [[ "$HOSTNAME" != xfer* ]]
+	then
+		source /projects/amp/peptaid/scripts/config-dlin.sh
+	fi
 fi
 #------------------------------------------------------------------------------#
 #                                 BOTH STARTUPS                                #
