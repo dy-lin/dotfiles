@@ -15,8 +15,13 @@
 # silence the bash shell deprecation warning
 export BASH_SILENCE_DEPRECATION_WARNING=1
 export HOMEBREW_NO_AUTO_UPDATE=1
+
+# conda config --set auto_activate_base false
 export LDFLAGS="-L/usr/local/opt/readline/lib"
 export CPPFLAGS="-I/usr/local/opt/readline/include"
+# export LDFLAGS="-L/usr/local/opt/util-linux/lib"
+# export CPPFLAGS="-I/usr/local/opt/util-linux/include"
+export PKG_CONFIG_PATH="/usr/local/opt/util-linux/lib/pkgconfig"
 # export LSCOLORS=ExFxBxDxCxegedabagacad
 export CLICOLOR=1
 export LSCOLORS=exGxcxdxcxeggdabagacad
@@ -28,6 +33,8 @@ export LSCOLORS=exGxcxdxcxeggdabagacad
 # alias awk='/usr/local/bin/gawk'
 # alias grep='/usr/local/bin/ggrep'
 # alias find=/usr/local/bin/gfind'
+alias sdv='open ~/Library/Application\ Support/Steam/SteamApps/common/Stardew\ Valley/Contents/MacOS'
+alias mods='cd ~/Library/Application\ Support/Steam/SteamApps/common/Stardew\ Valley/Contents/MacOS/Mods'
 alias jn='jupyter notebook'
 alias zoom='~/zoom.sh'
 # alias to launch pc login
@@ -39,7 +46,7 @@ alias ytdl='~/youtube.sh'
 alias unhide='hide -u'
 # alias sshh='ssh dlin@ssh.bcgsc.ca'
 # alias sftpp='sftp dlin@xfer.bcgsc.ca'
-# alias ssh='gsc'
+alias ssh='gsc'
 alias sftp='gsc2'
 alias brew='/usr/local/Homebrew/bin/brew'
 alias reset_usb='sudo killall -STOP -c usbd'
@@ -64,7 +71,10 @@ PS1="${WHITE}[ ${BLUE}\u${YELLOW}@${PURPLE}\h${YELLOW}: ${GREEN}\w ${WHITE}] ${W
 export PATH="$(getconf PATH)"
 MINICONDA_PATH="$HOME/anaconda/bin"
 HOMEBREW_PATH="/usr/local/bin"
+UTIL_LINUX_PATH="/usr/local/opt/util-linux/bin"
+UTIL_LINUX_SBIN="/usr/local/opt/util-linux/sbin"
 # export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+
 MY_BIN="$HOME/bin"
 
 # COREUTILS
@@ -105,20 +115,10 @@ INDENT_MAN="/usr/local/opt/gnu-indent/libexec/gnuman"
 
 TEXLIVE_BIN="/Library/TeX/texbin"
 export MANPATH=$CORE_MAN:$GREP_MAN:$SED_MAN:$AWK_MAN:$FIND_MAN:$INDENT_MAN:$TOOLS_MAN:$GETOPT_MAN:$TAR_MAN:$MANPATH
-export PATH=$TEXLIVE_BIN:$MINICONDA_PATH:$CORE_BIN:$GREP_BIN:$SED_BIN:$AWK_BIN:$FIND_BIN:$INDENT_BIN:$TOOLS_BIN:$GETOPT_BIN:$TAR_BIN:$HOMEBREW_PATH:$MY_BIN:$PATH #------------------------------------------------------------------------------#
+export PATH=$MINICONDA_PATH:$UTIL_LINUX_PATH:$CORE_BIN:$GREP_BIN:$SED_BIN:$AWK_BIN:$FIND_BIN:$INDENT_BIN:$TOOLS_BIN:$GETOPT_BIN:$TAR_BIN:$HOMEBREW_PATH:$MY_BIN:$PATH #------------------------------------------------------------------------------#
+# export PATH=$TEXLIVE_BIN:$MINICONDA_PATH:$CORE_BIN:$GREP_BIN:$SED_BIN:$AWK_BIN:$FIND_BIN:$INDENT_BIN:$TOOLS_BIN:$GETOPT_BIN:$TAR_BIN:$HOMEBREW_PATH:$MY_BIN:$PATH #------------------------------------------------------------------------------#
 #                                   FUNCTIONS                                  #
 #------------------------------------------------------------------------------#
-function ssh() {
-	if [[ "$#" -eq 0 ]]
-	then
-		gsc
-	elif [[ "$1" == hpce* || "$1" == hpcg* || "$1" == dlin* || "$1" == gphost* ]]
-	then
-		gsc
-	else
-		/usr/bin/ssh $1
-	fi
-}
 function reset_discord() {
 	cd ~/Library/Caches/
 	rm -rf com.hnc.Discord com.hnc.Discord.ShipIt
@@ -194,9 +194,13 @@ function hide() {
 function gsc() {
 	if [[ "$#" -eq 0 ]]
 	then
-		~/gsc.exp dlin02.phage.bcgsc.ca
-	else
+#		~/gsc.exp dlin02.phage.bcgsc.ca
+		~/gsc.exp dlin02
+	elif [[ "$1" == hpce* || "$1" == hpcg* || "$1" == dlin0* || "$1" == gphost* || "$1" == numbers* ]]
+	then
 		~/gsc.exp $1
+	else
+		/usr/bin/ssh $1
 	fi
 }
 
@@ -318,33 +322,33 @@ function sra() {
 ## bioSyntax pipe capability on your command line
 ##
 #export HIGHLIGHT="/usr/local/opt/source-highlight/share/source-highlight"
-export LESSOPEN="| /usr/local/bin/src-hilite-lesspipe.sh %s"
-export LESS=" -R "
-
-alias less='less -NSi -# 10'
+# export LESSOPEN="| /usr/local/bin/src-hilite-lesspipe.sh %s"
+# export LESS=" -R "
+# 
+# alias less='less -NSi -# 10'
 # -N: add line numbers
 # -S: don't wrap lines (force to single line)
 # -# 10: Horizontal scroll distance
 
-alias more='less'
+# alias more='less'
 
 # Explicit call of  <file format>-less for piping data
 # i.e:  samtools view -h aligned_hits.bam | sam-less
 # Core syntaxes (default)
-alias clustal-less='source-highlight -f esc --lang-def=clustal.lang --outlang-def=bioSyntax.outlang     --style-file=fasta.style | less'
-alias bed-less='source-highlight     -f esc --lang-def=bed.lang     --outlang-def=bioSyntax.outlang     --style-file=sam.style   | less'
-alias fa-less='source-highlight      -f esc --lang-def=fasta.lang   --outlang-def=bioSyntax.outlang     --style-file=fasta.style | less'
-alias fq-less='source-highlight      -f esc --lang-def=fastq.lang   --outlang-def=bioSyntax.outlang     --style-file=fasta.style | less'
-alias gtf-less='source-highlight     -f esc --lang-def=gtf.lang     --outlang-def=bioSyntax-vcf.outlang --style-file=vcf.style   | less'
-alias pdb-less='source-highlight     -f esc --lang-def=pdb.lang     --outlang-def=bioSyntax-vcf.outlang --style-file=pdb.style   | less'
-alias sam-less='source-highlight     -f esc --lang-def=sam.lang     --outlang-def=bioSyntax.outlang     --style-file=sam.style   | less'
-alias vcf-less='source-highlight     -f esc --lang-def=vcf.lang     --outlang-def=bioSyntax-vcf.outlang --style-file=vcf.style   | less'
-alias bam-less='sam-less'
-
-# Auxillary syntaxes (uncomment to activate)
-alias fai-less='source-highlight      -f esc --lang-def=faidx.lang    --outlang-def=bioSyntax.outlang   --style-file=sam.style   | less'
-alias flagstat-less='source-highlight -f esc --lang-def=flagstat.lang --outlang-def=bioSyntax.outlang   --style-file=sam.style   | less'
-
+# alias clustal-less='source-highlight -f esc --lang-def=clustal.lang --outlang-def=bioSyntax.outlang     --style-file=fasta.style | less'
+# alias bed-less='source-highlight     -f esc --lang-def=bed.lang     --outlang-def=bioSyntax.outlang     --style-file=sam.style   | less'
+# alias fa-less='source-highlight      -f esc --lang-def=fasta.lang   --outlang-def=bioSyntax.outlang     --style-file=fasta.style | less'
+# alias fq-less='source-highlight      -f esc --lang-def=fastq.lang   --outlang-def=bioSyntax.outlang     --style-file=fasta.style | less'
+# alias gtf-less='source-highlight     -f esc --lang-def=gtf.lang     --outlang-def=bioSyntax-vcf.outlang --style-file=vcf.style   | less'
+# alias pdb-less='source-highlight     -f esc --lang-def=pdb.lang     --outlang-def=bioSyntax-vcf.outlang --style-file=pdb.style   | less'
+# alias sam-less='source-highlight     -f esc --lang-def=sam.lang     --outlang-def=bioSyntax.outlang     --style-file=sam.style   | less'
+# alias vcf-less='source-highlight     -f esc --lang-def=vcf.lang     --outlang-def=bioSyntax-vcf.outlang --style-file=vcf.style   | less'
+# alias bam-less='sam-less'
+# 
+# # Auxillary syntaxes (uncomment to activate)
+# alias fai-less='source-highlight      -f esc --lang-def=faidx.lang    --outlang-def=bioSyntax.outlang   --style-file=sam.style   | less'
+# alias flagstat-less='source-highlight -f esc --lang-def=flagstat.lang --outlang-def=bioSyntax.outlang   --style-file=sam.style   | less'
+# 
 #------------------------------------------------------------------------------#
 #                               POWERLINE PROMPT                               #
 #------------------------------------------------------------------------------#
@@ -361,3 +365,7 @@ alias flagstat-less='source-highlight -f esc --lang-def=flagstat.lang --outlang-
 resize &> /dev/null
 # check window size upon start up 
 shopt -s checkwinsize
+shopt -s direxpand
+complete -d cd
+
+[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
