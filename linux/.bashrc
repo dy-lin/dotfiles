@@ -1,8 +1,5 @@
 # .bashrc
-if [[ "$HOSTNAME" != dlin02* ]]
-then	
-	export PKG_CONFIG_PATH=/gsc/btl/linuxbrew/Cellar/bash-completion@2/2.7/share/pkgconfig
-fi
+export PKG_CONFIG_PATH=/gsc/btl/linuxbrew/Cellar/bash-completion@2/2.7/share/pkgconfig
 
 if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
@@ -80,7 +77,7 @@ shopt -s checkwinsize
 #------------------------------------------------------------------------------#
 #                                   EXPANSION                                  #
 #------------------------------------------------------------------------------#
-if [[ "$HOSTNAME" != dlin0* && "$HOSTNAME" != xfer* && "$(lsb_release -a | grep "Release:" | awk '{print $2}')" == 7* ]]
+if [[ "$HOSTNAME" != xfer* && "$(lsb_release -a | grep "Release:" | awk '{print $2}')" == 7* ]]
 then
 	# That is, $ROOT_DIR is expanded to /projects/amp/peptaid using TAB
 	shopt -s direxpand
@@ -101,34 +98,20 @@ then
 	alias jobs='squeue -u dlin --format="%9i %9P %$(( $(tput cols) / 3 ))j %8u %2t %10M %6D %R"'
 fi
 
-# MAC ALIASES
-if [[ "$HOSTNAME" == dlin02* ]]
-then
-	alias ls='ls -hG'
-	alias dt='top -U dlin'
-	alias resize='COLUMNS=$(/usr/bin/tput cols) && LINES=$(/usr/bin/tput lines) && export COLUMNS LINES && echo "Resized."'
-	alias sed='/home/dlin/.homebrew/opt/gnu-sed/libexec/gnubin/gsed'
-	alias igv='/Users/dlin/src/IGV_2.8.0/igv.sh'
-	alias vim='/Users/dlin/vim/src/vim'
-	alias zoom='/Users/dlin/zoom.sh'
-
-# LINUX ALIASES
-else
-	alias ls='ls -h --color=auto'
-	alias vim='/gsc/btl/linuxbrew/bin/vim'
-	alias dtl='top -n 1 -b -u dlin | less'
-	alias wmi='readlink -f $(pwd)'
-	alias vimr='vim -M'
-	alias tsv="column -t -s$'\t'"
-	alias rmdiff='grep -Fvxf'
-	alias time_it='/usr/bin/time -pv'
-	alias dt='top -u dlin'
-	alias resize='/usr/bin/resize > /dev/null && echo "Resized."'
-	alias sambina='cd /projects/btl_scratch/saninta/amp_pipeline'
-	# export PROMPT_COMMAND="resize &>/dev/null ; $PROMPT_COMMAND"
-fi
-	alias timestamp="date '+%Y%m%d_%H%M%S'"
-	alias pst='ps -o pid,cmd -p $(pgrep -d, -u $USER -P 1) ww'  # get parent/root processes (not branches)
+alias ls='ls -h --color=auto'
+alias vim='/gsc/btl/linuxbrew/bin/vim'
+alias dtl='top -n 1 -b -u dlin | less'
+alias wmi='readlink -f $(pwd)'
+alias vimr='vim -M'
+alias tsv="column -t -s$'\t'"
+alias rmdiff='grep -Fvxf'
+alias time_it='/usr/bin/time -pv'
+alias dt='top -u dlin'
+alias resize='/usr/bin/resize > /dev/null && echo "Resized."'
+alias sambina='cd /projects/btl_scratch/saninta/amp_pipeline'
+# export PROMPT_COMMAND="resize &>/dev/null ; $PROMPT_COMMAND"
+alias timestamp="date '+%Y%m%d_%H%M%S'"
+alias pst='ps -o pid,cmd -p $(pgrep -d, -u $USER -P 1) ww'  # get parent/root processes (not branches)
 	
 #------------------------------------------------------------------------------#
 #                                     PATHS                                    #
@@ -141,30 +124,20 @@ export PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
 #------------------------------------------------------------------------------#
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-if [[ "$HOSTAME" != dlin02* ]]
-then
-	__conda_setup="$('/projects/btl/dlin/src/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-	if [ $? -eq 0 ]; then
-		eval "$__conda_setup"
+__conda_setup="$('/projects/btl/dlin/src/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+	eval "$__conda_setup"
+else
+	if [ -f "/projects/btl/dlin/src/miniconda3/etc/profile.d/conda.sh" ]; then
+		. "/projects/btl/dlin/src/miniconda3/etc/profile.d/conda.sh"
 	else
-		if [ -f "/projects/btl/dlin/src/miniconda3/etc/profile.d/conda.sh" ]; then
-			. "/projects/btl/dlin/src/miniconda3/etc/profile.d/conda.sh"
-		else
-			export PATH="/projects/btl/dlin/src/miniconda3/bin:$PATH"
-		fi
+		export PATH="/projects/btl/dlin/src/miniconda3/bin:$PATH"
 	fi
-	unset __conda_setup
-	# <<< conda initialize <<<
 fi
+unset __conda_setup
+# <<< conda initialize <<<
 
-# PATHS on MAC
-if [[ "$HOSTNAME" == dlin02* ]]
-then
-	IGV_MAC_PATH="~/src/IGV_2.8.0"
-	HOMEBREW_PATH="/home/dlin/.homebrew/bin"
-	OPENJDK_PATH="/home/dlin/.homebrew/opt/openjdk/bin"
-	export PATH="$OPENJDK_PATH:$HOMEBREW_PATH:$PATH:$IGV_MAC_PATH"
-elif [[ "$HOSTNAME" == xfer* ]]
+if [[ "$HOSTNAME" == xfer* ]]
 then
 	LINUXBREW_PATH="/gsc/btl/linuxbrew/bin"
 	MINICONDA_PATH="/projects/btl/dlin/src/miniconda3/bin"
@@ -426,36 +399,6 @@ function genotype() {
 	esac
 }
 
-# GET FULL PATH 
-function path() {
-	if [[ "$HOSTNAME" != dlin02* ]]
-	then
-		if [[ "$#" -ne 1 ]]
-		then
-			readlink -f .
-		else
-			if [[ -e $1 ]]
-			then
-				readlink -f $1
-			else
-				echo "$1 does not exist in the specified directory."
-			fi
-		fi
-	else
-		if [[ "$#" -eq 0 ]]
-		then
-			pwd
-		else
-		#	if [[ ! -e "$1" ]]
-		#	then
-		#		echo "$(pwd)/$1"
-		#	else
-			echo "$(pwd)/$1"
-		#	fi
-		fi
-	fi
-}
-
 # CD TO DIRNAME OF GIVEN FILE
 function cdd() {
 	if [[ "$1" == */ ]]
@@ -530,31 +473,6 @@ function bam() {
 		samtools view -b -@ 128 $sam | samtools sort -@ 128 > ${filename}.sorted.bam
 		samtools index -@ 128 ${filename}.sorted.bam
 	fi
-}
-
-# IGV SHORTCUT WITH GFF
-function see() {
-	scaffold=$1
-	fasta=${scaffold}.scaffold.fa
-	gff=${scaffold}.gff
-	dir=$(pwd)
-	if [[ "$HOSTNAME" != dlin02* ]]
-	then
-		echo "IGV only works on your local machine."
-		echo "Please logout and try on your local machine."
-		echo "Current directory:"
-		echo $dir
-		return
-	fi
-	if [ ! -e "$gff" ]
-	then
-		gff=${scaffold}.manual.gff
-		if [ ! -e "$gff" ]
-		then
-			return
-		fi
-	fi
-	/gsc/btl/linuxbrew/bin/igv -g $fasta $gff
 }
 
 # UNLINK DIRECTORIES
@@ -755,102 +673,32 @@ function search() {
 #------------------------------------------------------------------------------#
 #                                  MAC STARTUP                                 #
 #------------------------------------------------------------------------------#
-if [[ "$HOSTNAME" == dlin02* ]]
-then
-	# Do not update homebrew
-	export HOMEBREW_NO_AUTO_UPDATE=1
-
-	# Customize ls colours
-	export LSCOLORS=exgxcxdxcxegadabagacad
-
-	# Customize vim
-	export VIMRUNTIME=/Users/dlin/vim/runtime
-
-	# Mount volumes
-	cd /projects/amp/
-	cd /projects/btl/dlin
-	cd /home/dlin/Documents
-	cd /home/dlin/Desktop
-	cd /home/dlin
-
-	# Resize the window upon startup
-	resize > /dev/null
-	COLUMNS=$(/usr/bin/tput cols) && LINES=$(/usr/bin/tput lines) && export COLUMNS LINES
-
-#------------------------------------------------------------------------------#
-#                                   BIOSYNTAX                                  #
-#------------------------------------------------------------------------------#
-	##   __     __   __           ___
-	##  |__) | /  \ /__` \ / |\ |  |   /\  \_/
-	##  |__) | \__/ .__/  |  | \|  |  /~~\ / \
-	##  =======================================
-	##
-	## Syntax Highlighting for computational biology bp.append
-	## v0.1
-	##
-	## Append this to your ~/.bashprofile in MacOS
-	## to enable source-highlight for less and add
-	## bioSyntax pipe capability on your command line
-	##
-	#export HIGHLIGHT="/usr/local/opt/source-highlight/share/source-highlight"
-	export LESSOPEN="| /home/dlin/.homebrew/bin/src-hilite-lesspipe.sh %s"
-	export LESS=" -R "
-
-	alias less='less -NSi -# 10'
-	# -N: add line numbers
-	# -S: don't wrap lines (force to single line)
-	# -# 10: Horizontal scroll distance
-
-	alias more='less'
-
-	# Explicit call of  <file format>-less for piping data
-	# i.e:  samtools view -h aligned_hits.bam | sam-less
-	# Core syntaxes (default)
-	alias clustal-less='source-highlight -f esc --lang-def=clustal.lang --outlang-def=bioSyntax.outlang     --style-file=fasta.style | less'
-	alias bed-less='source-highlight     -f esc --lang-def=bed.lang     --outlang-def=bioSyntax.outlang     --style-file=sam.style   | less'
-	alias fa-less='source-highlight      -f esc --lang-def=fasta.lang   --outlang-def=bioSyntax.outlang     --style-file=fasta.style | less'
-	alias fq-less='source-highlight      -f esc --lang-def=fastq.lang   --outlang-def=bioSyntax.outlang     --style-file=fasta.style | less'
-	alias gtf-less='source-highlight     -f esc --lang-def=gtf.lang     --outlang-def=bioSyntax-vcf.outlang --style-file=vcf.style   | less'
-	alias pdb-less='source-highlight     -f esc --lang-def=pdb.lang     --outlang-def=bioSyntax-vcf.outlang --style-file=pdb.style   | less'
-	alias sam-less='source-highlight     -f esc --lang-def=sam.lang     --outlang-def=bioSyntax.outlang     --style-file=sam.style   | less'
-	alias vcf-less='source-highlight     -f esc --lang-def=vcf.lang     --outlang-def=bioSyntax-vcf.outlang --style-file=vcf.style   | less'
-	alias bam-less='sam-less'
-
-	# Auxillary syntaxes (uncomment to activate)
-	alias fai-less='source-highlight      -f esc --lang-def=faidx.lang    --outlang-def=bioSyntax.outlang   --style-file=sam.style   | less'
-	alias flagstat-less='source-highlight -f esc --lang-def=flagstat.lang --outlang-def=bioSyntax.outlang   --style-file=sam.style   | less'
-
-#------------------------------------------------------------------------------#
-#                                 LINUX STARTUP                                #
-#------------------------------------------------------------------------------#
-else
 #	cd /projects/amp/peptaid
 #	cd /projects/amp/hackathon20
-	cd /projects/amp/rAMPage
-	/usr/bin/resize &> /dev/null
-	if [[ "$HOSTNAME" != xfer* ]]
-	then
-		source /projects/amp/peptaid/scripts/config-dlin.sh
-	fi
+cd /projects/amp/rAMPage
+/usr/bin/resize &> /dev/null
+if [[ "$HOSTNAME" != xfer* ]]
+then
+	source /projects/amp/peptaid/scripts/config-dlin.sh
 fi
 #------------------------------------------------------------------------------#
 #                                 BOTH STARTUPS                                #
 #------------------------------------------------------------------------------#
-	# MAN PAGE COLOR CODING
-	export LESS_TERMCAP_mb=$'\E[01;31m'
-	# export LESS_TERMCAP_mb=$'\e[1;32m'
-	export LESS_TERMCAP_md=$'\E[01;33m'
-	# export LESS_TERMCAP_md=$'\e[1;32m'
-	export LESS_TERMCAP_me=$'\E[0m'
-	# export LESS_TERMCAP_me=$'\e[0m'
-	export LESS_TERMCAP_se=$'\E[0m'
-	# export LESS_TERMCAP_se=$'\e[0m'
-	export LESS_TERMCAP_so=$'\E[01;42;30m'
-	# export LESS_TERMCAP_so=$'\e[01;33m'
-	export LESS_TERMCAP_ue=$'\E[0m'
-	# export LESS_TERMCAP_ue=$'\e[0m'
-	export LESS_TERMCAP_us=$'\E[01;36m'
-	# export LESS_TERMCAP_us=$'\e[1;4;31m'
+# MAN PAGE COLOR CODING
+export LESS_TERMCAP_mb=$'\E[01;31m'
+# export LESS_TERMCAP_mb=$'\e[1;32m'
+export LESS_TERMCAP_md=$'\E[01;33m'
+# export LESS_TERMCAP_md=$'\e[1;32m'
+export LESS_TERMCAP_me=$'\E[0m'
+# export LESS_TERMCAP_me=$'\e[0m'
+export LESS_TERMCAP_se=$'\E[0m'
+# export LESS_TERMCAP_se=$'\e[0m'
+export LESS_TERMCAP_so=$'\E[01;42;30m'
+# export LESS_TERMCAP_so=$'\e[01;33m'
+export LESS_TERMCAP_ue=$'\E[0m'
+# export LESS_TERMCAP_ue=$'\e[0m'
+export LESS_TERMCAP_us=$'\E[01;36m'
+# export LESS_TERMCAP_us=$'\e[1;4;31m'
 
-	# READ/WRITE PERMISSIONS FOR GROUP
-	umask ug+rw
+# READ/WRITE PERMISSIONS FOR GROUP
+umask ug+rw
