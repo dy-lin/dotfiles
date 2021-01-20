@@ -1,5 +1,9 @@
 # .bashrc
 
+#------------------------------------------------------------------------------#
+#                                    ALIASES                                   #
+#------------------------------------------------------------------------------#
+
 alias ls='ls -hG'
 alias dt='top -U dlin'
 alias resize='COLUMNS=$(/usr/bin/tput cols) && LINES=$(/usr/bin/tput lines) && export COLUMNS LINES && echo "Resized."'
@@ -8,10 +12,30 @@ alias igv='/Users/dlin/src/IGV_2.8.0/igv.sh'
 alias vim='/Users/dlin/vim/src/vim'
 alias zoom='/Users/dlin/zoom.sh'
 
+#------------------------------------------------------------------------------#
+#                                     PATHS                                    #
+#------------------------------------------------------------------------------#
+
 IGV_MAC_PATH="~/src/IGV_2.8.0"
 HOMEBREW_PATH="/home/dlin/.homebrew/bin"
 OPENJDK_PATH="/home/dlin/.homebrew/opt/openjdk/bin"
 export PATH="$OPENJDK_PATH:$HOMEBREW_PATH:$PATH:$IGV_MAC_PATH"
+
+#------------------------------------------------------------------------------#
+#                                    PROMPT                                    #
+#------------------------------------------------------------------------------#
+# PS1="[ \[\e[1;36m\]\u\[\e[33m\]@\[\e[35m\]\h\[\e[33m\]:\[\e[32m\] \W \[\e[0m\]] \$\[\e[0m\] "
+BLUE="\[\033[1;36m\]"
+YELLOW="\[\033[33m\]"
+PURPLE="\[\033[35m\]"
+GREEN="\[\033[32m\]"
+WHITE="\[\033[0m\]"
+PS1="$WHITE[ $BLUE\u$YELLOW@$PURPLE\h$YELLOW: $GREEN\w $WHITE] $WHITE\$ "
+
+#------------------------------------------------------------------------------#
+#                                  WINDOW SIZE                                 #
+#------------------------------------------------------------------------------#
+shopt -s checkwinsize
 
 # Do not update homebrew
 export HOMEBREW_NO_AUTO_UPDATE=1
